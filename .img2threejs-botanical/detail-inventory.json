@@ -1,0 +1,187 @@
+{
+  "sourceImage": "img/a.png",
+  "zonesDir": ".img2threejs-botanical/zones",
+  "detailInventory": {
+    "scanMethod": "grid-3x3",
+    "targetMinDetails": 16,
+    "details": [
+      {
+        "id": "upper-spike-curve",
+        "kind": "contour",
+        "description": "상단 인삼 이삭이 중앙에서 시작해 우상단으로 크게 휘는 연속 실루엣",
+        "region": { "x": 0.42, "y": 0.05, "width": 0.43, "height": 0.36, "units": "normalized" },
+        "scale": "macro",
+        "affects": "geometry",
+        "mapsTo": { "type": "component.localFeatures", "ref": "ginseng_spike.curved_tube" },
+        "evidenceRef": "img/a.png upper-center",
+        "confidence": 0.96
+      },
+      {
+        "id": "upper-spike-bracts",
+        "kind": "ridge",
+        "description": "주 줄기 양쪽으로 겹치는 다수의 길쭉한 포엽",
+        "region": { "x": 0.49, "y": 0.08, "width": 0.35, "height": 0.29, "units": "normalized" },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": { "type": "component.localFeatures", "ref": "ginseng_spike.bract_cluster" },
+        "evidenceRef": ".img2threejs-botanical/zones/zone-r0c1.png",
+        "confidence": 0.95
+      },
+      {
+        "id": "upper-spike-gradient",
+        "kind": "stain",
+        "description": "포엽의 녹황색 끝과 주황·적갈색 기부 색 변이",
+        "region": { "x": 0.48, "y": 0.08, "width": 0.36, "height": 0.29, "units": "normalized" },
+        "scale": "micro",
+        "affects": "albedo roughness",
+        "mapsTo": { "type": "material.localOverrides", "ref": "stem_material.bract_gradient" },
+        "evidenceRef": ".img2threejs-botanical/zones/zone-r0c1.png",
+        "confidence": 0.9
+      },
+      {
+        "id": "pale-bud-sepals",
+        "kind": "contour",
+        "description": "좌상단의 크림색 봉오리와 올리브색 겹꽃받침",
+        "region": { "x": 0.23, "y": 0.34, "width": 0.18, "height": 0.24, "units": "normalized" },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": { "type": "component.localFeatures", "ref": "pale_bud.sepal_volume" },
+        "evidenceRef": ".img2threejs-botanical/zones/zone-r1c0.png",
+        "confidence": 0.9
+      },
+      {
+        "id": "coral-flower-silhouette",
+        "kind": "contour",
+        "description": "좌측 전면을 채우는 큰 산호색 꽃의 불규칙한 넓은 꽃잎 고리",
+        "region": { "x": 0.18, "y": 0.46, "width": 0.28, "height": 0.27, "units": "normalized" },
+        "scale": "macro",
+        "affects": "geometry",
+        "mapsTo": { "type": "component.localFeatures", "ref": "coral_flower.outer_petals" },
+        "evidenceRef": ".img2threejs-botanical/zones/zone-r1c0.png",
+        "confidence": 0.97
+      },
+      {
+        "id": "coral-petal-ridges",
+        "kind": "ridge",
+        "description": "큰 주황 꽃잎을 따라 방사형으로 흐르는 주름과 중앙맥",
+        "region": { "x": 0.2, "y": 0.5, "width": 0.25, "height": 0.2, "units": "normalized" },
+        "scale": "micro",
+        "affects": "geometry normal",
+        "mapsTo": { "type": "component.localFeatures", "ref": "coral_flower.petal_ridges" },
+        "evidenceRef": ".img2threejs-botanical/zones/zone-r1c0.png",
+        "confidence": 0.88
+      },
+      {
+        "id": "coral-stamens",
+        "kind": "ridge",
+        "description": "좌측 큰 꽃 중심의 노란 방사형 수술 군집",
+        "region": { "x": 0.39, "y": 0.58, "width": 0.08, "height": 0.1, "units": "normalized" },
+        "scale": "micro",
+        "affects": "geometry",
+        "mapsTo": { "type": "component.localFeatures", "ref": "coral_flower.stamen_cluster" },
+        "evidenceRef": ".img2threejs-botanical/zones/zone-r1c0.png",
+        "confidence": 0.92
+      },
+      {
+        "id": "orange-flower-nested-petals",
+        "kind": "contour",
+        "description": "우상단 꽃의 안쪽으로 말린 겹꽃잎과 깊은 중심 공간",
+        "region": { "x": 0.73, "y": 0.36, "width": 0.18, "height": 0.22, "units": "normalized" },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": { "type": "component.localFeatures", "ref": "orange_flower.nested_petals" },
+        "evidenceRef": ".img2threejs-botanical/zones/zone-r1c2.png",
+        "confidence": 0.95
+      },
+      {
+        "id": "side-spike-bracts",
+        "kind": "ridge",
+        "description": "우측으로 뻗는 짧은 곡선 줄기와 겹치는 포엽",
+        "region": { "x": 0.69, "y": 0.54, "width": 0.25, "height": 0.18, "units": "normalized" },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": { "type": "component.localFeatures", "ref": "side_spike.bract_cluster" },
+        "evidenceRef": ".img2threejs-botanical/zones/zone-r1c2.png",
+        "confidence": 0.9
+      },
+      {
+        "id": "green-pod-pair",
+        "kind": "contour",
+        "description": "좌하단의 두꺼운 올리브색 타원형 꼬투리 한 쌍",
+        "region": { "x": 0.29, "y": 0.72, "width": 0.18, "height": 0.17, "units": "normalized" },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": { "type": "component.localFeatures", "ref": "lower_pods.green_pair" },
+        "evidenceRef": ".img2threejs-botanical/zones/zone-r2c0.png",
+        "confidence": 0.94
+      },
+      {
+        "id": "pod-central-veins",
+        "kind": "ridge",
+        "description": "하단 꼬투리의 세로 중앙맥과 가장자리 두께",
+        "region": { "x": 0.28, "y": 0.72, "width": 0.38, "height": 0.2, "units": "normalized" },
+        "scale": "micro",
+        "affects": "geometry normal",
+        "mapsTo": { "type": "component.localFeatures", "ref": "lower_pods.central_veins" },
+        "evidenceRef": ".img2threejs-botanical/zones/zone-r2c1.png",
+        "confidence": 0.86
+      },
+      {
+        "id": "burgundy-cluster",
+        "kind": "contour",
+        "description": "하단 중앙의 세 겹 적갈색 꽃과 황록색 중심",
+        "region": { "x": 0.43, "y": 0.68, "width": 0.2, "height": 0.14, "units": "normalized" },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": { "type": "component.localFeatures", "ref": "burgundy_cluster.layered_petals" },
+        "evidenceRef": ".img2threejs-botanical/zones/zone-r2c1.png",
+        "confidence": 0.91
+      },
+      {
+        "id": "hanging-bud",
+        "kind": "contour",
+        "description": "하단 중앙의 길쭉한 주황·크림색 닫힌 봉오리",
+        "region": { "x": 0.46, "y": 0.78, "width": 0.13, "height": 0.19, "units": "normalized" },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": { "type": "component.localFeatures", "ref": "lower_pods.hanging_bud" },
+        "evidenceRef": ".img2threejs-botanical/zones/zone-r2c1.png",
+        "confidence": 0.92
+      },
+      {
+        "id": "white-five-petal-repeat",
+        "kind": "contour",
+        "description": "우하단을 이루는 다섯 잎 흰 꽃의 불규칙 반복 군집",
+        "region": { "x": 0.61, "y": 0.67, "width": 0.2, "height": 0.23, "units": "normalized" },
+        "scale": "meso",
+        "affects": "geometry repetition",
+        "mapsTo": { "type": "component.localFeatures", "ref": "white_flower_cluster.five_petal_repeat" },
+        "evidenceRef": ".img2threejs-botanical/zones/zone-r2c1.png",
+        "confidence": 0.98
+      },
+      {
+        "id": "white-flower-centers",
+        "kind": "ridge",
+        "description": "흰 꽃마다 돌출된 황록색 중심과 짧은 수술",
+        "region": { "x": 0.63, "y": 0.69, "width": 0.18, "height": 0.18, "units": "normalized" },
+        "scale": "micro",
+        "affects": "geometry",
+        "mapsTo": { "type": "component.localFeatures", "ref": "white_flower_cluster.stamen_centers" },
+        "evidenceRef": ".img2threejs-botanical/zones/zone-r2c1.png",
+        "confidence": 0.9
+      },
+      {
+        "id": "brown-pod-variation",
+        "kind": "stain",
+        "description": "우하단 갈색 꼬투리의 올리브 중앙과 어두운 갈색 가장자리 변이",
+        "region": { "x": 0.58, "y": 0.75, "width": 0.2, "height": 0.2, "units": "normalized" },
+        "scale": "micro",
+        "affects": "albedo roughness",
+        "mapsTo": { "type": "material.localOverrides", "ref": "leaf_material.brown_pod_gradient" },
+        "evidenceRef": ".img2threejs-botanical/zones/zone-r2c1.png",
+        "confidence": 0.88
+      }
+    ]
+  },
+  "authoringInstruction": "Map all sixteen details into the final component tree or material local overrides before strict validation."
+}

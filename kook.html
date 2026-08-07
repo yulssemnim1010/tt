@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KOOKSOONDANG — Rice Makgeolli</title>
+  <style>
+    :root {
+      --bg: #f3ece1;
+      --ink: #241c12;
+      --accent: #a2825a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: auto; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* 캔버스는 고정, 스크롤은 아래 섹션들이 만든다 */
+    #scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: grid;
+      place-items: center;
+      background: var(--bg);
+      transition: opacity .8s ease;
+      letter-spacing: .3em;
+      font-size: 12px;
+      color: var(--accent);
+    }
+    #loader.hidden { opacity: 0; pointer-events: none; }
+
+    #track { position: relative; z-index: 1; }
+
+    section {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 8vw;
+      pointer-events: none;
+    }
+    section .copy {
+      max-width: 26ch;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .9s ease, transform .9s ease;
+    }
+    section.in .copy { opacity: 1; transform: none; }
+
+    section:nth-child(even) { justify-content: flex-end; text-align: right; }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: .38em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.4rem;
+    }
+    h1, h2 {
+      font-weight: 600;
+      font-size: clamp(2rem, 4.4vw, 3.4rem);
+      line-height: 1.25;
+      letter-spacing: -.02em;
+      margin-bottom: 1.2rem;
+    }
+    p {
+      font-size: clamp(.9rem, 1.1vw, 1.02rem);
+      line-height: 2;
+      opacity: .68;
+    }
+
+    .scroll-hint {
+      position: fixed;
+      bottom: 3vh; left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      font-size: 10px;
+      letter-spacing: .35em;
+      color: var(--accent);
+      transition: opacity .5s ease;
+    }
+    .scroll-hint::after {
+      content: '';
+      display: block;
+      width: 1px; height: 40px;
+      margin: 12px auto 0;
+      background: linear-gradient(var(--accent), transparent);
+      animation: drop 2s ease-in-out infinite;
+    }
+    @keyframes drop {
+      0%   { transform: scaleY(0); transform-origin: top; }
+      45%  { transform: scaleY(1); transform-origin: top; }
+      55%  { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+  </style>
+</head>
+<body>
+  <div id="loader">LOADING</div>
+  <canvas id="scene"></canvas>
+
+  <div id="track">
+    <section>
+      <div class="copy">
+        <div class="eyebrow">Kooksoondang</div>
+        <h1>쌀로 빚은<br>스파클링</h1>
+        <p>국순당이 오래 다뤄온 쌀과 누룩. 그 사이에서 태어나는 부드러운 탄산.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="copy">
+        <div class="eyebrow">Rice</div>
+        <h2>백미의<br>단맛</h2>
+        <p>정미한 쌀이 발효되며 남기는 은은한 곡물의 단맛이 목 넘김 끝에 머뭅니다.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="copy">
+        <div class="eyebrow">Makgeolli</div>
+        <h2>흔들어,<br>깨우다</h2>
+        <p>가라앉은 앙금이 다시 섞이는 순간. 뿌옇게 번지는 한 잔의 밀도.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="copy">
+        <div class="eyebrow">Smooth Sparkling</div>
+        <h2>가볍게,<br>오래</h2>
+        <p>차게 식혀 그대로. 잔을 비우는 속도만큼 천천히 이어지는 시간.</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="scroll-hint" id="hint">SCROLL</div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+    const canvas = document.getElementById('scene');
+    const hint = document.getElementById('hint');
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    // 라벨 텍스처가 이미 레퍼런스의 조명을 그대로 담고 있다. 여기에 조명을 세게 얹으면
+    // 갈색 띠가 베이지로 날아간다. 형태가 읽힐 만큼만 빛을 준다.
+    renderer.toneMappingExposure = 0.82;
+
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(35, innerWidth / innerHeight, 0.1, 100);
+    camera.position.set(0, 0, 5.9);
+    camera.lookAt(0, 0, 0);
+
+    // 레퍼런스가 부드러운 스튜디오 조명이라 환경광이 대부분을 만든다
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+    const key = new THREE.DirectionalLight(0xfff6ea, 0.85);
+    key.position.set(2.6, 4.2, 4.0);
+    scene.add(key);
+
+    const rim = new THREE.DirectionalLight(0xffe6c4, 0.55);
+    rim.position.set(-4.0, 1.6, -2.6);
+    scene.add(rim);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.30));
+
+    // =================================================================
+    // 국순당 쌀 막걸리 PET 병
+    //
+    // 실루엣은 img/kook.png 에서 스캔라인별 반쪽 너비를 뽑아 만든 것이다.
+    // 회전체이므로 그 반쪽 너비가 곧 lathe 프로파일이다.
+    // 좌표계: u = 바닥에서의 높이 / 병 전체 높이, r = 반지름 / 병 전체 높이.
+    // =================================================================
+    const H = 1.95;              // 병 전체 높이 (월드 단위)
+    const V_SPAN = 0.905;        // 라벨 텍스처가 덮는 u 범위 (0 ~ 0.905)
+    const SEG = 192;             // 원주 분할
+
+    // 측정된 몸통 실루엣 — 굽 위(u=0.085)부터 목까지.
+    const BODY_PROFILE = [
+      [0.085,0.1414], [0.1035,0.1437], [0.1219,0.1451], [0.1404,0.1454],
+      [0.1588,0.1446], [0.1773,0.1447], [0.1957,0.1448], [0.2142,0.1449],
+      [0.2326,0.1450], [0.2511,0.1451], [0.2695,0.1452], [0.2880,0.1452],
+      [0.3065,0.1452], [0.3249,0.1452], [0.3434,0.1454], [0.3618,0.1455],
+      [0.3803,0.1455], [0.3987,0.1457], [0.4172,0.1458], [0.4356,0.1458],
+      [0.4541,0.1459], [0.4725,0.1459], [0.4910,0.1459], [0.5095,0.1459],
+      [0.5279,0.1460], [0.5464,0.1461], [0.5648,0.1460], [0.5833,0.1457],
+      [0.6017,0.1443], [0.6202,0.1419], [0.6386,0.1388], [0.6571,0.1348],
+      [0.6755,0.1299], [0.6940,0.1243], [0.7125,0.1176], [0.7309,0.1098],
+      [0.7494,0.1011], [0.7678,0.0916], [0.7863,0.0818], [0.8047,0.0730],
+      [0.8232,0.0655], [0.8416,0.0595], [0.8601,0.0556], [0.8785,0.0534],
+      [0.8970,0.0523], [0.9110,0.0521], [0.9210,0.0518]   // ← 목을 캡 안쪽까지 연장
+    ];
+
+    // 굽은 회전체가 아니다. 발 8개가 내려오고 그 사이가 위로 아치를 그린다.
+    // 두 프로파일을 방위각으로 블렌딩한다. t=0 에서 둘이 같은 값이라
+    // 몸통과의 이음매가 벌어지지 않는다.
+    const FOOT_PROFILE = [
+      [0.085,0.1414], [0.070,0.1385], [0.055,0.1330], [0.042,0.1245],
+      [0.030,0.1130], [0.020,0.0975], [0.012,0.0790], [0.006,0.0560],
+      [0.002,0.0300], [0.000,0.0000]
+    ];
+    const VALLEY_PROFILE = [
+      [0.085,0.1414], [0.076,0.1330], [0.068,0.1215], [0.062,0.1070],
+      [0.057,0.0900], [0.053,0.0715], [0.050,0.0520], [0.048,0.0330],
+      [0.047,0.0150], [0.047,0.0000]
+    ];
+    const FEET = 8;
+
+    const v2 = ([u, r]) => new THREE.Vector2(r * H, u * H);
+
+    // Lathe 의 기본 uv.y 는 프로파일 배열의 "인덱스"라 높이에 비례하지 않는다.
+    // 라벨은 실제 높이 기준으로 감아야 하므로 월드 y 에서 다시 계산한다.
+    function heightUV(geo) {
+      const pos = geo.attributes.position, uv = geo.attributes.uv;
+      for (let i = 0; i < pos.count; i++) uv.setY(i, pos.getY(i) / (V_SPAN * H));
+      uv.needsUpdate = true;
+      return geo;
+    }
+
+    // phiStart = -PI 라서 seam 이 병 뒤로 가고 uv.x = 0.5 가 정면이 된다.
+    // 텍스처의 가로 중앙이 사진에서 본 정면이므로 이게 맞다.
+    function latheFrom(profile, segments = SEG) {
+      const g = new THREE.LatheGeometry(profile.map(v2), segments, -Math.PI, Math.PI * 2);
+      g.computeVertexNormals();
+      return g;
+    }
+
+    function smoothstep(a, b, x) {
+      const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+      return t * t * (3 - 2 * t);
+    }
+
+    // 굽: (t, phi) 격자 위에서 발 프로파일 ↔ 골 프로파일을 섞는다
+    function petaloidBase() {
+      const rows = FOOT_PROFILE.length, cols = SEG;
+      const pos = [], uv = [], idx = [];
+      for (let i = 0; i <= cols; i++) {
+        const phi = -Math.PI + (i / cols) * Math.PI * 2;
+        // cos(FEET*phi)=1 인 방위각이 발. 정면(phi=0)에 발이 오도록 맞췄다.
+        const w = smoothstep(0.18, 0.92, 0.5 + 0.5 * Math.cos(FEET * phi));
+        for (let j = 0; j < rows; j++) {
+          const f = FOOT_PROFILE[j], v = VALLEY_PROFILE[j];
+          const u = v[0] + (f[0] - v[0]) * w;
+          const r = v[1] + (f[1] - v[1]) * w;
+          pos.push(r * H * Math.sin(phi), u * H, r * H * Math.cos(phi));
+          uv.push(i / cols, u / V_SPAN);
+        }
+      }
+      // j 는 위에서 아래로 내려가므로 (a, a+1, b) 순서라야 바깥쪽이 앞면이 된다
+      for (let i = 0; i < cols; i++)
+        for (let j = 0; j < rows - 1; j++) {
+          const a = i * rows + j, b = a + rows;
+          idx.push(a, a + 1, b, b, a + 1, b + 1);
+        }
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+      g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+      g.setIndex(idx);
+      g.computeVertexNormals();
+      return g;
+    }
+
+    // 캡 널링(세로 홈) — 반지름을 방위각으로 변조한 원통
+    function flutedRing(u0, u1, r, ribs, amp, rows = 4) {
+      const cols = ribs * 6;
+      const pos = [], idx = [];
+      for (let i = 0; i <= cols; i++) {
+        const phi = -Math.PI + (i / cols) * Math.PI * 2;
+        const rr = r - amp * 0.5 * (1 - Math.cos(ribs * phi));
+        for (let j = 0; j < rows; j++) {
+          const u = u0 + (u1 - u0) * (j / (rows - 1));
+          pos.push(rr * H * Math.sin(phi), u * H, rr * H * Math.cos(phi));
+        }
+      }
+      for (let i = 0; i < cols; i++)
+        for (let j = 0; j < rows - 1; j++) {
+          const a = i * rows + j, b = a + rows;
+          idx.push(a, b, a + 1, b, b + 1, a + 1);
+        }
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+      g.setIndex(idx);
+      // flutedRing 은 j 가 아래→위 순서라 위 굽과 감김 방향이 반대다
+      g.computeVertexNormals();
+      return g;
+    }
+
+    // 텍스처를 못 읽었을 때(file:// 등)를 위한 대체 라벨 — 색 띠만 재현한다
+    function fallbackLabel() {
+      const c = document.createElement('canvas');
+      c.width = 16; c.height = 512;
+      const g = c.getContext('2d');
+      const grad = g.createLinearGradient(0, 512, 0, 0);
+      grad.addColorStop(0.00, '#9d7c52');
+      grad.addColorStop(0.53, '#a8875d');
+      grad.addColorStop(0.55, '#f0e6d5');
+      grad.addColorStop(0.80, '#f4ecdf');
+      grad.addColorStop(1.00, '#efe7da');
+      g.fillStyle = grad;
+      g.fillRect(0, 0, 16, 512);
+      const t = new THREE.CanvasTexture(c);
+      t.colorSpace = THREE.SRGBColorSpace;
+      return t;
+    }
+
+    const bodyMat = new THREE.MeshPhysicalMaterial({
+      color: 0xffffff,
+      roughness: 0.34,
+      metalness: 0.0,
+      clearcoat: 0.55,
+      clearcoatRoughness: 0.12,
+      envMapIntensity: 0.40
+    });
+
+    // 라벨 = 사진을 원통 역투영으로 펼친 실제 픽셀 (img/kook-label.png)
+    new THREE.TextureLoader().load(
+      'img/kook-label.png',
+      tex => {
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.wrapS = THREE.RepeatWrapping;          // 방위각은 감긴다
+        tex.wrapT = THREE.ClampToEdgeWrapping;     // 높이는 잘라낸다
+        tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        bodyMat.map = tex;
+        bodyMat.needsUpdate = true;
+      },
+      undefined,
+      () => {
+        console.warn('[bottle] img/kook-label.png 로드 실패 — 색 띠만 있는 대체 라벨로 표시합니다. ' +
+                     'file:// 로 열면 텍스처가 차단되니 로컬 서버로 여세요.');
+        bodyMat.map = fallbackLabel();
+        bodyMat.needsUpdate = true;
+      }
+    );
+
+    const capMat = new THREE.MeshPhysicalMaterial({
+      color: 0x15151a, roughness: 0.36, metalness: 0.0,
+      clearcoat: 0.75, clearcoatRoughness: 0.18, envMapIntensity: 1.1
+    });
+
+    // 목의 지지 링만 투명 PET 그대로 보인다
+    const petMat = new THREE.MeshPhysicalMaterial({
+      color: 0xffffff, transmission: 0.92, thickness: 0.05, ior: 1.57,
+      roughness: 0.07, metalness: 0.0, clearcoat: 1.0, clearcoatRoughness: 0.04,
+      envMapIntensity: 1.3, transparent: true, side: THREE.DoubleSide
+    });
+
+    const bottle = new THREE.Group();
+    bottle.name = 'kooksoondang-rice-makgeolli';
+
+    const parts = [
+      ['bottle-body',       heightUV(latheFrom(BODY_PROFILE)),                  bodyMat],
+      ['bottle-base',       petaloidBase(),                                     bodyMat],
+      ['neck-support-ring', latheFrom([
+                              [0.8880,0.0521], [0.8905,0.0668], [0.8955,0.0702],
+                              [0.9005,0.0668], [0.9025,0.0521]], 128),          petMat],
+      ['cap-tamper-band',   latheFrom([
+                              [0.9040,0.0600], [0.9060,0.0674], [0.9300,0.0672],
+                              [0.9330,0.0642], [0.9365,0.0628], [0.9400,0.0652]],
+                              128),                                             capMat],
+      ['cap-knurl',         flutedRing(0.9400, 0.9935, 0.0652, 64, 0.0026, 4),  capMat],
+      ['cap-crown',         latheFrom([
+                              [0.9935,0.0652], [0.9970,0.0634], [0.9992,0.0556],
+                              [1.0000,0.0400], [1.0000,0.0000]], 128),          capMat]
+    ];
+
+    for (const [name, geo, mat] of parts) {
+      const m = new THREE.Mesh(geo, mat);
+      m.name = name;
+      bottle.add(m);
+    }
+
+    // 회전이 병 한가운데에서 일어나도록 원점을 무게중심으로 옮긴다
+    bottle.children.forEach(m => { m.position.y -= H * 0.5; });
+
+    const product = new THREE.Group();
+    product.add(bottle);
+    scene.add(product);
+
+    bottle.userData.sculptRuntime = {
+      reference: 'img/kook.png',
+      totalHeight: H,
+      parts: parts.map(([n]) => n),
+      pivot: 'centroid',
+      notes: '실루엣은 레퍼런스 스캔라인에서 측정. 라벨은 사진의 원통 역투영이며 ' +
+             '뒤쪽 180도는 행별 띠 색으로 합성한 추정이다.'
+    };
+
+    // 떠 있는 병 뒤로 깔리는 부드러운 광원 — 접지 그림자 대신 깊이를 만든다
+    function radialTexture(inner, mid) {
+      const c = document.createElement('canvas');
+      c.width = c.height = 256;
+      const g = c.getContext('2d');
+      const grad = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+      grad.addColorStop(0, inner);
+      grad.addColorStop(0.55, mid);
+      grad.addColorStop(1, 'rgba(150,120,80,0)');
+      g.fillStyle = grad;
+      g.fillRect(0, 0, 256, 256);
+      const t = new THREE.CanvasTexture(c);
+      t.colorSpace = THREE.SRGBColorSpace;
+      return t;
+    }
+    const halo = new THREE.Mesh(
+      new THREE.PlaneGeometry(5.2, 5.2),
+      new THREE.MeshBasicMaterial({
+        map: radialTexture('rgba(255,246,231,.85)', 'rgba(214,190,155,.22)'),
+        transparent: true, depthWrite: false, toneMapped: false
+      })
+    );
+    halo.position.z = -1.6;
+    halo.name = 'backdrop-halo';
+    product.add(halo);
+
+    // ---------------------------------------------------------------
+    // 쌀알 파티클 — 스크롤에 따라 병 주위를 도는 액센트
+    // ---------------------------------------------------------------
+    function riceTexture() {
+      const c = document.createElement('canvas');
+      c.width = c.height = 128;
+      const g = c.getContext('2d');
+      const grad = g.createLinearGradient(0, 20, 0, 108);
+      grad.addColorStop(0, '#fffaf0');
+      grad.addColorStop(0.5, '#f3e7d2');
+      grad.addColorStop(1, '#dcc9a8');
+      g.fillStyle = grad;
+      g.beginPath();
+      g.ellipse(64, 64, 20, 46, 0, 0, Math.PI * 2);
+      g.fill();
+      const t = new THREE.CanvasTexture(c);
+      t.colorSpace = THREE.SRGBColorSpace;
+      return t;
+    }
+
+    const GRAINS = 30;
+    const grains = new THREE.InstancedMesh(
+      new THREE.PlaneGeometry(0.075, 0.17),
+      new THREE.MeshBasicMaterial({
+        map: riceTexture(), transparent: true, side: THREE.DoubleSide,
+        depthWrite: false, toneMapped: false, opacity: 0.9
+      }),
+      GRAINS
+    );
+    grains.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    grains.name = 'rice-grains';
+    scene.add(grains);
+
+    const grainData = Array.from({ length: GRAINS }, (_, i) => ({
+      radius: 1.1 + Math.random() * 1.7,
+      angle: (i / GRAINS) * Math.PI * 2 + Math.random(),
+      height: -1.9 + Math.random() * 3.8,
+      speed: 0.14 + Math.random() * 0.34,
+      spin: (Math.random() - 0.5) * 1.8,
+      tilt: Math.random() * Math.PI
+    }));
+
+    const dummy = new THREE.Object3D();
+
+    // ---------------------------------------------------------------
+    // 스크롤 → 목표값. 렌더 루프에서 lerp 로 감쇠시켜야 끊기지 않는다.
+    // ---------------------------------------------------------------
+    // 각 구간의 [진행도, 값] 키프레임을 smoothstep 보간
+    function track(p, keys) {
+      for (let i = 0; i < keys.length - 1; i++) {
+        const [p0, v0] = keys[i], [p1, v1] = keys[i + 1];
+        if (p <= p1) {
+          const t = p1 === p0 ? 0 : (p - p0) / (p1 - p0);
+          const e = t * t * (3 - 2 * t);
+          return v0 + (v1 - v0) * e;
+        }
+      }
+      return keys[keys.length - 1][1];
+    }
+
+    const target = { rotY: 0, rotX: 0.10, rotZ: -0.06, posX: 0, posY: 0.72, camZ: 5.9 };
+    const current = { ...target };
+    let progress = 0;
+
+    function updateTargets() {
+      const p = progress;
+      target.rotY = p * Math.PI * 5;                                   // 총 2.5바퀴
+      target.posY = track(p, [[0, 0.72], [1, -0.72]]);                 // 꾸준히 하강
+      target.posX = track(p, [[0, 0], [0.28, 0.62], [0.62, -0.58], [1, 0]]);
+      target.rotX = track(p, [[0, 0.10], [0.5, -0.15], [1, 0.05]]);
+      target.rotZ = track(p, [[0, -0.06], [0.5, 0.08], [1, -0.03]]);
+      target.camZ = track(p, [[0, 5.9], [0.45, 6.6], [1, 7.4]]);
+    }
+
+    function onScroll() {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      progress = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+      updateTargets();
+      hint.style.opacity = progress > 0.02 ? 0 : 1;
+    }
+    addEventListener('scroll', onScroll, { passive: true });
+
+    // 섹션 카피 페이드인
+    const io = new IntersectionObserver(
+      entries => entries.forEach(e => e.target.classList.toggle('in', e.isIntersecting)),
+      { threshold: 0.4 }
+    );
+    document.querySelectorAll('section').forEach(s => io.observe(s));
+
+    addEventListener('resize', () => {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+      onScroll();
+    });
+
+    const clock = new THREE.Clock();
+    const LERP = 0.075;
+
+    function tick() {
+      const t = clock.getElapsedTime();
+
+      for (const k in target) current[k] += (target[k] - current[k]) * LERP;
+
+      bottle.rotation.y = current.rotY;
+      bottle.rotation.x = current.rotX;
+      bottle.rotation.z = current.rotZ;
+      product.position.x = current.posX;
+      // 스크롤이 멈춰도 미세하게 떠 있도록 사인파를 얹는다
+      product.position.y = current.posY + Math.sin(t * 0.8) * 0.03;
+      camera.position.z = current.camZ;
+      camera.lookAt(current.posX * 0.3, 0, 0);
+
+      for (let i = 0; i < GRAINS; i++) {
+        const d = grainData[i];
+        const a = d.angle + t * d.speed * 0.35 + current.rotY * 0.1;
+        dummy.position.set(
+          Math.cos(a) * d.radius + current.posX * 0.55,
+          d.height + current.posY * 0.35 + Math.sin(t * d.speed + i) * 0.22,
+          Math.sin(a) * d.radius
+        );
+        dummy.rotation.set(d.tilt + t * d.spin * 0.3, a, t * d.spin * 0.2);
+        dummy.updateMatrix();
+        grains.setMatrixAt(i, dummy.matrix);
+      }
+      grains.instanceMatrix.needsUpdate = true;
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    }
+
+    onScroll();
+    Object.assign(current, target);
+    tick();
+    requestAnimationFrame(() => document.getElementById('loader').classList.add('hidden'));
+
+    // 리뷰용 오프스크린 캡처 훅 — ?debug 일 때만 노출된다.
+    // 레퍼런스와 같은 정면/궤도 뷰를 고정 프레임으로 뽑기 위한 것.
+    if (new URLSearchParams(location.search).has('debug')) {
+      window.__capture = ({ yaw = 0, pitch = 0, w = 700, h = 980, dist = 5.4 } = {}) => {
+        const pr = renderer.getPixelRatio();
+        const keep = { pos: product.position.clone(), rot: bottle.rotation.clone() };
+        renderer.setPixelRatio(1);
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        camera.position.set(0, 0, dist);
+        camera.lookAt(0, 0, 0);
+        product.position.set(0, 0, 0);
+        bottle.rotation.set(pitch, yaw, 0);
+        halo.visible = false;
+        grains.visible = false;
+        scene.background = new THREE.Color(0xf3ece1);
+        renderer.render(scene, camera);
+        const url = renderer.domElement.toDataURL('image/png');
+        scene.background = null;
+        halo.visible = true;
+        grains.visible = true;
+        product.position.copy(keep.pos);
+        bottle.rotation.copy(keep.rot);
+        renderer.setPixelRatio(pr);
+        renderer.setSize(innerWidth, innerHeight);
+        camera.aspect = innerWidth / innerHeight;
+        camera.updateProjectionMatrix();
+        return url;
+      };
+    }
+  </script>
+</body>
+</html>

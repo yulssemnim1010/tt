@@ -1,0 +1,4291 @@
+{
+  "targetName": "Botanical Cream Assembly",
+  "targetId": "botanical-cream-assembly",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js asset",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "primitive",
+      "bevel",
+      "chamfer",
+      "taper",
+      "bend",
+      "boolean cut",
+      "edge loop",
+      "surface normal",
+      "displacement"
+    ],
+    "materialTerms": [
+      "albedo",
+      "baseColor",
+      "roughness",
+      "metalness",
+      "normal map",
+      "bump map",
+      "ambient occlusion",
+      "cavity dirt",
+      "edge wear",
+      "clearcoat"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "HDRI/environment reflection",
+      "contact shadow"
+    ],
+    "descriptionRule": "Use measurable 3D graphics terms. Avoid vague words unless they are paired with concrete geometry/material/shader parameters."
+  },
+  "sourceImage": "img\\a.png",
+  "referenceCamera": {
+    "solved": false,
+    "fovDegrees": 40,
+    "aspect": 1,
+    "orientation": {
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0
+    },
+    "positionHint": [
+      0,
+      0,
+      3
+    ],
+    "note": "For likeness work, solve the reference camera (forge/stage1_intake/solve_camera_pose.py) so the review render aligns with the photo and the reference can be projected. Confirm by overlay review."
+  },
+  "suitability": "conditional",
+  "scores": {
+    "object_isolation": 3,
+    "silhouette_readability": 3,
+    "depth_inference": 2,
+    "primitive_decomposition": 3,
+    "material_procedurality": 2,
+    "occlusion_risk": 2,
+    "interaction_fit": 3
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "botanical product display assembly",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "organic",
+        "botanical-like",
+        "hard-surface"
+      ],
+      "structureKind": [
+        "compound object",
+        "branching hierarchy",
+        "repeated modules"
+      ],
+      "motionPotential": [
+        "whole-object transform"
+      ],
+      "materialFamilies": [
+        "glass-like",
+        "metal",
+        "petal",
+        "leaf",
+        "stem"
+      ],
+      "notes": "The cream jar is radial hard-surface geometry; flowers, leaves, and ginseng spikes are attached procedural organic geometry supported by the a-d multi-view references."
+    },
+    "complexity": {
+      "tier": "ultra-complex",
+      "scores": {
+        "silhouetteComplexity": 3,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 3,
+        "localDetailDensity": 3,
+        "occlusionRisk": 3,
+        "actionReadinessNeed": 2
+      },
+      "estimatedCounts": {
+        "macroComponents": 5,
+        "mesoComponents": 18,
+        "microFeatureGroups": 10,
+        "materialLayers": 8,
+        "repetitionSystems": 3
+      },
+      "reasoning": [
+        "The interrupted organic silhouette, multiple overlapping botanical systems, and repeated petals/bracts require a deep component hierarchy and multiple orbit reviews."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "ultra-complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Choose simple/moderate/complex/ultra-complex from observed structure, not from a hardcoded domain."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "grid-3x3",
+      "targetMinDetails": 16,
+      "details": [
+        {
+          "id": "upper-spike-curve",
+          "kind": "contour",
+          "description": "상단 인삼 이삭이 중앙에서 시작해 우상단으로 크게 휘는 연속 실루엣",
+          "region": {
+            "x": 0.42,
+            "y": 0.05,
+            "width": 0.43,
+            "height": 0.36,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "ginseng_spike.curved_tube"
+          },
+          "evidenceRef": "img/a.png upper-center",
+          "confidence": 0.96
+        },
+        {
+          "id": "upper-spike-bracts",
+          "kind": "ridge",
+          "description": "주 줄기 양쪽으로 겹치는 다수의 길쭉한 포엽",
+          "region": {
+            "x": 0.49,
+            "y": 0.08,
+            "width": 0.35,
+            "height": 0.29,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "ginseng_spike.bract_cluster"
+          },
+          "evidenceRef": ".img2threejs-botanical/zones/zone-r0c1.png",
+          "confidence": 0.95
+        },
+        {
+          "id": "upper-spike-gradient",
+          "kind": "stain",
+          "description": "포엽의 녹황색 끝과 주황·적갈색 기부 색 변이",
+          "region": {
+            "x": 0.48,
+            "y": 0.08,
+            "width": 0.36,
+            "height": 0.29,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "albedo roughness",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "stem_material.bract_gradient"
+          },
+          "evidenceRef": ".img2threejs-botanical/zones/zone-r0c1.png",
+          "confidence": 0.9
+        },
+        {
+          "id": "pale-bud-sepals",
+          "kind": "contour",
+          "description": "좌상단의 크림색 봉오리와 올리브색 겹꽃받침",
+          "region": {
+            "x": 0.23,
+            "y": 0.34,
+            "width": 0.18,
+            "height": 0.24,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "pale_bud.sepal_volume"
+          },
+          "evidenceRef": ".img2threejs-botanical/zones/zone-r1c0.png",
+          "confidence": 0.9
+        },
+        {
+          "id": "coral-flower-silhouette",
+          "kind": "contour",
+          "description": "좌측 전면을 채우는 큰 산호색 꽃의 불규칙한 넓은 꽃잎 고리",
+          "region": {
+            "x": 0.18,
+            "y": 0.46,
+            "width": 0.28,
+            "height": 0.27,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "coral_flower.outer_petals"
+          },
+          "evidenceRef": ".img2threejs-botanical/zones/zone-r1c0.png",
+          "confidence": 0.97
+        },
+        {
+          "id": "coral-petal-ridges",
+          "kind": "ridge",
+          "description": "큰 주황 꽃잎을 따라 방사형으로 흐르는 주름과 중앙맥",
+          "region": {
+            "x": 0.2,
+            "y": 0.5,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry normal",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "coral_flower.petal_ridges"
+          },
+          "evidenceRef": ".img2threejs-botanical/zones/zone-r1c0.png",
+          "confidence": 0.88
+        },
+        {
+          "id": "coral-stamens",
+          "kind": "ridge",
+          "description": "좌측 큰 꽃 중심의 노란 방사형 수술 군집",
+          "region": {
+            "x": 0.39,
+            "y": 0.58,
+            "width": 0.08,
+            "height": 0.1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "coral_flower.stamen_cluster"
+          },
+          "evidenceRef": ".img2threejs-botanical/zones/zone-r1c0.png",
+          "confidence": 0.92
+        },
+        {
+          "id": "orange-flower-nested-petals",
+          "kind": "contour",
+          "description": "우상단 꽃의 안쪽으로 말린 겹꽃잎과 깊은 중심 공간",
+          "region": {
+            "x": 0.73,
+            "y": 0.36,
+            "width": 0.18,
+            "height": 0.22,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "orange_flower.nested_petals"
+          },
+          "evidenceRef": ".img2threejs-botanical/zones/zone-r1c2.png",
+          "confidence": 0.95
+        },
+        {
+          "id": "side-spike-bracts",
+          "kind": "ridge",
+          "description": "우측으로 뻗는 짧은 곡선 줄기와 겹치는 포엽",
+          "region": {
+            "x": 0.69,
+            "y": 0.54,
+            "width": 0.25,
+            "height": 0.18,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "side_spike.bract_cluster"
+          },
+          "evidenceRef": ".img2threejs-botanical/zones/zone-r1c2.png",
+          "confidence": 0.9
+        },
+        {
+          "id": "green-pod-pair",
+          "kind": "contour",
+          "description": "좌하단의 두꺼운 올리브색 타원형 꼬투리 한 쌍",
+          "region": {
+            "x": 0.29,
+            "y": 0.72,
+            "width": 0.18,
+            "height": 0.17,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "lower_pods.green_pair"
+          },
+          "evidenceRef": ".img2threejs-botanical/zones/zone-r2c0.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "pod-central-veins",
+          "kind": "ridge",
+          "description": "하단 꼬투리의 세로 중앙맥과 가장자리 두께",
+          "region": {
+            "x": 0.28,
+            "y": 0.72,
+            "width": 0.38,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry normal",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "lower_pods.central_veins"
+          },
+          "evidenceRef": ".img2threejs-botanical/zones/zone-r2c1.png",
+          "confidence": 0.86
+        },
+        {
+          "id": "burgundy-cluster",
+          "kind": "contour",
+          "description": "하단 중앙의 세 겹 적갈색 꽃과 황록색 중심",
+          "region": {
+            "x": 0.43,
+            "y": 0.68,
+            "width": 0.2,
+            "height": 0.14,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "burgundy_cluster.layered_petals"
+          },
+          "evidenceRef": ".img2threejs-botanical/zones/zone-r2c1.png",
+          "confidence": 0.91
+        },
+        {
+          "id": "hanging-bud",
+          "kind": "contour",
+          "description": "하단 중앙의 길쭉한 주황·크림색 닫힌 봉오리",
+          "region": {
+            "x": 0.46,
+            "y": 0.78,
+            "width": 0.13,
+            "height": 0.19,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "lower_pods.hanging_bud"
+          },
+          "evidenceRef": ".img2threejs-botanical/zones/zone-r2c1.png",
+          "confidence": 0.92
+        },
+        {
+          "id": "white-five-petal-repeat",
+          "kind": "contour",
+          "description": "우하단을 이루는 다섯 잎 흰 꽃의 불규칙 반복 군집",
+          "region": {
+            "x": 0.61,
+            "y": 0.67,
+            "width": 0.2,
+            "height": 0.23,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry repetition",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "white_flower_cluster.five_petal_repeat"
+          },
+          "evidenceRef": ".img2threejs-botanical/zones/zone-r2c1.png",
+          "confidence": 0.98
+        },
+        {
+          "id": "white-flower-centers",
+          "kind": "ridge",
+          "description": "흰 꽃마다 돌출된 황록색 중심과 짧은 수술",
+          "region": {
+            "x": 0.63,
+            "y": 0.69,
+            "width": 0.18,
+            "height": 0.18,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "white_flower_cluster.stamen_centers"
+          },
+          "evidenceRef": ".img2threejs-botanical/zones/zone-r2c1.png",
+          "confidence": 0.9
+        },
+        {
+          "id": "brown-pod-variation",
+          "kind": "stain",
+          "description": "우하단 갈색 꼬투리의 올리브 중앙과 어두운 갈색 가장자리 변이",
+          "region": {
+            "x": 0.58,
+            "y": 0.75,
+            "width": 0.2,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "albedo roughness",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "leaf_material.brown_pod_gradient"
+          },
+          "evidenceRef": ".img2threejs-botanical/zones/zone-r2c1.png",
+          "confidence": 0.88
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "C:\\최율희연습\\k브랜드\\tt\\img\\a.png"
+  },
+  "qualityContract": {
+    "qualityBar": "ultra-complex",
+    "definitionOfDone": [
+      "At front, right, rear, and left views the botanical assembly remains volumetric rather than collapsing to a plane; the jar, stems, petals, leaves, ginseng bracts, and white flower cluster share one rotation root; the front silhouette preserves the large left bloom, right bloom, arched upper spike, and lower white/burgundy/leaf masses."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 3,
+      "mesoComponents": 8,
+      "microFeatureGroups": 16,
+      "materialLayers": 8,
+      "repetitionSystems": 3,
+      "reviewViewpoints": 5
+    },
+    "featureGroups": [
+      {
+        "id": "overall-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true,
+        "qualityCriteria": [
+          "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model reads as a generic placeholder instead of the reference object",
+          "major proportions are guessed without evidence"
+        ]
+      },
+      {
+        "id": "primary-structure",
+        "name": "Primary structure and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "large visible parts are merged into one mesh",
+          "component hierarchy is too shallow for the observed complexity"
+        ]
+      },
+      {
+        "id": "attachment-joint-correctness",
+        "name": "Attachment and joint correctness",
+        "required": true,
+        "qualityCriteria": [
+          "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "child part root floats away from the parent",
+          "branch/limb/tube is centered in space instead of pivoting from its root",
+          "parent-child transform mixes world and local coordinates"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "Surface material response",
+        "required": true,
+        "qualityCriteria": [
+          "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+          "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+          "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "surface looks like flat plastic",
+          "local material variation is missing or not tied to image evidence"
+        ]
+      },
+      {
+        "id": "reference-lookdev",
+        "name": "Reference color, material, and lighting response",
+        "required": true,
+        "qualityCriteria": [
+          "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+          "When a source image is available, run reference PBR extraction and require confidence >= 0.7 before treating maps as implementation-ready.",
+          "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+          "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model has acceptable shape but reads as flat shaded or plastic",
+          "colors are a generic average instead of reference-observed local color zones",
+          "lighting is evenly ambient and cannot reproduce the source value range"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette and negative-space delta",
+      "component hierarchy depth delta",
+      "repetition density and distribution delta",
+      "material albedo/roughness/normal response delta",
+      "local feature placement and scale delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ],
+    "mustNotDo": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "qualityTargets": {
+    "targetFidelity": 0.7,
+    "mustMatch": [
+      "macro silhouette and proportions",
+      "primary material albedo/roughness response",
+      "reference-derived PBR material response at or above 0.7 confidence when source pixels are usable",
+      "most recognizable local features"
+    ],
+    "niceToHave": [
+      "micro scratches, stains, chips, and dirt masks",
+      "secondary lighting match"
+    ],
+    "fpsTarget": 60,
+    "reviewViewpoints": [
+      "front",
+      "three-quarter",
+      "side",
+      "thickness-axis",
+      "long-axis"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.7,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "scoringRule": "AI vision must inspect a side-by-side reference/render sheet and score the current pass from 0 to 1. Pixel-diff code may assist diagnostics but cannot approve a pass.",
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true,
+        "selectionRule": "Choose only the most visually salient, identity-defining, user-prioritized, or high-risk semantic systems. Group repeated parts instead of reviewing every mesh. AI vision scores every selected feature from the same full reference/render pair."
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "specRefineTriggers": [
+      "missing component",
+      "wrong primitive family",
+      "wrong proportions",
+      "material layer under-specified",
+      "local feature not traceable to viewEvidence",
+      "reference ambiguity discovered during implementation"
+    ],
+    "codeRefineTriggers": [
+      "spec is adequate but generated geometry/material does not match",
+      "browser render differs from reference",
+      "performance budget exceeded",
+      "lighting hides geometry or material response"
+    ],
+    "stopCriteria": [
+      "target fidelity reached or user accepts current approximation",
+      "remaining gaps require new reference images or manual art"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "surface-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "in-app-browser-screenshot",
+      "fallbackCapture": "user-supplied-screenshot-path",
+      "minimumEvidence": "Each visual pass needs a reference image, rendered screenshot, side-by-side comparison sheet, AI vision score, layer scores, and critique before choosing continue.",
+      "reviewPairRule": "Compare the same camera/viewpoint whenever possible; do not judge a front reference against a random render angle.",
+      "acceptanceAuthority": "AI vision review of the comparison sheet. Code-generated pixel similarity is not sufficient evidence."
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "botanical-orbit-volume",
+      "name": "Botanical volume across four orbit views",
+      "tier": "critical",
+      "passIds": [
+        "blockout",
+        "form-refinement"
+      ],
+      "minimumScore": 0.8,
+      "mustPass": true,
+      "componentRefs": [
+        "botanical_assembly",
+        "ginseng_spike",
+        "coral_flower",
+        "white_flower_cluster"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "right-view",
+        "rear-view",
+        "left-view"
+      ]
+    },
+    {
+      "id": "flower-attachment-depth",
+      "name": "Flower and stem attachment depth",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "form-refinement"
+      ],
+      "minimumScore": 0.8,
+      "mustPass": true,
+      "componentRefs": [
+        "ginseng_spike",
+        "coral_flower",
+        "orange_flower",
+        "side_spike"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "right-view",
+        "rear-view"
+      ]
+    },
+    {
+      "id": "botanical-color-groups",
+      "name": "Orange, white, burgundy, and olive material groups",
+      "tier": "critical",
+      "passIds": [
+        "material-pass",
+        "surface-pass"
+      ],
+      "minimumScore": 0.75,
+      "mustPass": true,
+      "componentRefs": [
+        "coral_flower",
+        "orange_flower",
+        "white_flower_cluster",
+        "lower_pods"
+      ],
+      "evidenceRefs": [
+        "front-view"
+      ]
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "blockout",
+    "completedPasses": [],
+    "lastCompletedPass": "",
+    "blockedReason": "",
+    "nextRequiredEvidence": [
+      "Silhouette reads correctly without materials.",
+      "Quality contract has named all required macro feature groups before code generation.",
+      "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold.",
+      "browser render screenshot from your agent's browser/screenshot tool",
+      "side-by-side reference/render comparison sheet for AI vision review",
+      "AI vision score at or above the visual acceptance threshold",
+      "all critical semantic feature scores from the shared image pair at or above their thresholds",
+      "self-correction review appended with action=continue before the next pass"
+    ]
+  },
+  "lookDevTargets": {
+    "qualityPriority": "real-time-browser",
+    "materialPass": {
+      "albedoPaletteRequired": true,
+      "roughnessVariationRequired": true,
+      "normalOrBumpRequired": true,
+      "localOverridesRequired": true,
+      "minimumTextureResolution": 1024,
+      "preferredTextureResolution": 2048,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "requiredSurfaceFrequencyBands": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "geometryReliefRequiredWhenSilhouetteAffected": true,
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": false,
+        "targetThreshold": 0.7,
+        "stopOnLowConfidence": true,
+        "script": "forge/stage1_intake/extract_pbr_evidence.py",
+        "acceptedLimitation": "single-image extraction is reference-derived inference, not exact photogrammetry",
+        "note": "Photo projection is intentionally excluded because the model must hold during orbit; colors are procedural approximations."
+      },
+      "mustAvoid": [
+        "single flat albedo per material",
+        "uniform roughness",
+        "albedo texture reused as roughness/height/normal/AO",
+        "single-frequency random noise",
+        "plastic-looking smooth bark, stone, cloth, foliage, or aged material",
+        "local color/detail described only in prose without material masks",
+        "claiming exact PBR recovery when confidence is below the target threshold"
+      ]
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim or environment light",
+        "exposure",
+        "tone mapping",
+        "background",
+        "contact shadow"
+      ],
+      "mustAvoid": [
+        "ambient-only lighting",
+        "flat value range",
+        "missing contact shadow",
+        "reference lighting copied without separating material readability"
+      ]
+    },
+    "screenshotReview": [
+      "Compare albedo palette and local color zones.",
+      "Compare roughness/normal/bump response under light.",
+      "Compare cavity dirt, edge wear, stains, moss, scratches, or other local masks.",
+      "Compare key/fill/rim structure, exposure, tone mapping, background, and contact shadows.",
+      "Capture a neutral-light render to verify material readability without reference lighting.",
+      "Capture a grazing-light close-up to expose flat normals, uniform roughness, tiling, and plastic highlights.",
+      "Capture a reference-matched render from the same camera framing as the source."
+    ]
+  },
+  "actionReadiness": {
+    "contract": "Every macro/meso component should be generated as a stable named Object3D pivot node with a mesh child, action metadata, optional sockets, collider proxy, and destruction metadata.",
+    "defaultRigType": "action-ready-static-rig",
+    "rootMotionNode": "root",
+    "requiredComponentFields": [
+      "id",
+      "parent",
+      "transform",
+      "attachment for child appendages, connectors, limbs, tubes, handles, legs, horns, wings, branches, or cables",
+      "actionProfile.animationRole",
+      "actionProfile.pivot",
+      "actionProfile.collider",
+      "actionProfile.destruction"
+    ],
+    "transformChannels": [
+      "translate",
+      "rotate",
+      "scale",
+      "bend",
+      "twist",
+      "detach",
+      "visibility",
+      "material-state"
+    ],
+    "authoringRules": [
+      "Do not collapse independently movable parts into one mesh.",
+      "Put transforms on component pivot groups, not only on raw meshes.",
+      "For attached child parts, put the pivot at the semantic root/socket and build visible geometry from localStart to localEnd.",
+      "Represent hinge, socket, detachable, and breakable intent even when no animation is implemented yet.",
+      "Use simplified collider proxies for runtime physics instead of visual mesh colliders by default."
+    ],
+    "destructionPolicy": {
+      "defaultBreakable": false,
+      "fractureGroupNaming": "Use stable semantic names such as body-shell, left-hinge, glass-panel, branch-segment.",
+      "debrisStrategy": "Prefer detachable component groups and a small number of procedural fragments over random mesh explosion."
+    }
+  },
+  "assumptions": [
+    "Hidden petal curvature is inferred from b-d and implemented as a real-time procedural approximation.",
+    "Botanical species identity is not asserted; observable silhouette, layering, and color grouping are the targets."
+  ],
+  "coordinateFrame": {
+    "front": "camera-facing side in the reference image",
+    "up": "image up direction",
+    "scaleReference": "unit scale; adjust after first browser render"
+  },
+  "silhouette": {
+    "boundingShape": "asymmetric near-square botanical ring surrounding a radial jar",
+    "aspectRatios": [
+      1,
+      1,
+      0.42
+    ],
+    "symmetry": "asymmetric botanical assembly with radial jar core",
+    "dominantCurves": [
+      "upper ginseng spike arcs from center to upper-right",
+      "lower pod fan spreads below jar"
+    ],
+    "negativeSpaces": [
+      "open gaps between petals, spikes, leaves, and jar"
+    ],
+    "landmarks": [
+      "large left coral bloom",
+      "right orange bloom",
+      "lower-right white cluster"
+    ]
+  },
+  "viewEvidence": [
+    {
+      "id": "front-view",
+      "view": "front",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "front silhouette and overlap order"
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "right-view",
+      "view": "right-three-quarter",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "petal depth and side spike attachment"
+      ],
+      "confidence": 0.84
+    },
+    {
+      "id": "rear-view",
+      "view": "rear",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "rear stems and bud depth"
+      ],
+      "confidence": 0.82
+    },
+    {
+      "id": "left-view",
+      "view": "left-three-quarter",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "left bloom depth and lower pod fan"
+      ],
+      "confidence": 0.84
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "Botanical Cream Assembly Root",
+      "level": "macro",
+      "role": "body",
+      "importance": 1,
+      "confidence": 0.82,
+      "primitive": "plane-card",
+      "topologyClass": "material-only",
+      "topologyRationale": "Named transform container with no visible geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "Named transform container with no visible geometry.",
+        "edgeTreatment": {
+          "type": "soft organic edge",
+          "bevelRadius": 0.02,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from continuous geometry"
+      },
+      "parent": null,
+      "attachment": null,
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 0.35,
+        "units": "relative",
+        "confidence": 0.8
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.9
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "sphere",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "root",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "plant"
+        }
+      },
+      "material": "utility_root",
+      "materialLayers": [
+        "utility_root"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.08,
+        "bumpAmplitude": 0.03,
+        "normalPattern": "radial organic vein breakup",
+        "displacementPattern": "low-amplitude petal or stem taper",
+        "occlusionPattern": "contact-darkened overlapping roots",
+        "edgeWearPattern": "none",
+        "notes": "Reference-observed organic relief remains geometric at silhouette scale."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "right-view",
+        "rear-view",
+        "left-view"
+      ],
+      "details": [],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": null
+    },
+    {
+      "id": "cream_jar",
+      "name": "Cream Jar",
+      "level": "macro",
+      "role": "body",
+      "importance": 1,
+      "confidence": 0.82,
+      "primitive": "lathe",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "Radially symmetric vessel with a smoothly varying profile visible in a, e, g, and h.",
+      "geometryDescriptor": {
+        "topologyIntent": "Radially symmetric vessel with a smoothly varying profile visible in a, e, g, and h.",
+        "edgeTreatment": {
+          "type": "soft organic edge",
+          "bevelRadius": 0.02,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from continuous geometry"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentId": "root",
+        "parentSocket": "assembly-root",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          1.4,
+          0
+        ],
+        "baseRadius": 0.08,
+        "endRadius": 0.03,
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "embedded",
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 0.35,
+        "units": "relative",
+        "confidence": 0.8
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "attachment-root",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.9
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": true,
+          "twist": true,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "sphere",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "plant"
+        }
+      },
+      "material": "jar_glass",
+      "materialLayers": [
+        "jar_glass"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.08,
+        "bumpAmplitude": 0.03,
+        "normalPattern": "radial organic vein breakup",
+        "displacementPattern": "low-amplitude petal or stem taper",
+        "occlusionPattern": "contact-darkened overlapping roots",
+        "edgeWearPattern": "none",
+        "notes": "Reference-observed organic relief remains geometric at silhouette scale."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "right-view",
+        "rear-view",
+        "left-view"
+      ],
+      "details": [],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(199, 67, 33, 1)",
+        "secondaryAlbedo": "rgba(241, 185, 103, 1)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.82,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "position": 0,
+              "color": "rgba(199, 67, 33, 1)"
+            },
+            {
+              "position": 1,
+              "color": "rgba(241, 185, 103, 1)"
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      }
+    },
+    {
+      "id": "botanical_assembly",
+      "name": "Botanical Assembly",
+      "level": "macro",
+      "role": "body",
+      "importance": 1,
+      "confidence": 0.82,
+      "primitive": "plane-card",
+      "topologyClass": "material-only",
+      "topologyRationale": "Named hierarchy container for all visible botanical geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "Named hierarchy container for all visible botanical geometry.",
+        "edgeTreatment": {
+          "type": "soft organic edge",
+          "bevelRadius": 0.02,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from continuous geometry"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentId": "root",
+        "parentSocket": "assembly-root",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          1,
+          0
+        ],
+        "baseRadius": 0.08,
+        "endRadius": 0.03,
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "embedded",
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 0.35,
+        "units": "relative",
+        "confidence": 0.8
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "attachment-root",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.9
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": true,
+          "twist": true,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "sphere",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "plant"
+        }
+      },
+      "material": "utility_root",
+      "materialLayers": [
+        "utility_root"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.08,
+        "bumpAmplitude": 0.03,
+        "normalPattern": "radial organic vein breakup",
+        "displacementPattern": "low-amplitude petal or stem taper",
+        "occlusionPattern": "contact-darkened overlapping roots",
+        "edgeWearPattern": "none",
+        "notes": "Reference-observed organic relief remains geometric at silhouette scale."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "right-view",
+        "rear-view",
+        "left-view"
+      ],
+      "details": [],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": null
+    },
+    {
+      "id": "ginseng_spike",
+      "name": "Upper Ginseng Spike",
+      "level": "meso",
+      "role": "branch",
+      "importance": 0.85,
+      "confidence": 0.82,
+      "primitive": "tube",
+      "topologyClass": "fiber-strand",
+      "topologyRationale": "A continuous curved stem with repeated bracts follows the upper silhouette in all views.",
+      "geometryDescriptor": {
+        "topologyIntent": "A continuous curved stem with repeated bracts follows the upper silhouette in all views.",
+        "edgeTreatment": {
+          "type": "soft organic edge",
+          "bevelRadius": 0.02,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from continuous geometry"
+      },
+      "parent": "botanical_assembly",
+      "attachment": {
+        "parentId": "botanical_assembly",
+        "parentSocket": "assembly-root",
+        "localStart": [
+          -0.15,
+          0.25,
+          -0.35
+        ],
+        "localEnd": [
+          0.85,
+          1.7,
+          -0.25
+        ],
+        "baseRadius": 0.08,
+        "endRadius": 0.03,
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "embedded",
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 0.35,
+        "units": "relative",
+        "confidence": 0.8
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "attachment-root",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.9
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": true,
+          "twist": true,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "sphere",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "plant"
+        }
+      },
+      "material": "stem_material",
+      "materialLayers": [
+        "stem_material"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "ginseng_spike.curved_tube",
+        "ginseng_spike.bract_cluster"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.08,
+        "bumpAmplitude": 0.03,
+        "normalPattern": "radial organic vein breakup",
+        "displacementPattern": "low-amplitude petal or stem taper",
+        "occlusionPattern": "contact-darkened overlapping roots",
+        "edgeWearPattern": "none",
+        "notes": "Reference-observed organic relief remains geometric at silhouette scale."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "right-view",
+        "rear-view",
+        "left-view"
+      ],
+      "details": [],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(143, 62, 32, 1)",
+        "secondaryAlbedo": "rgba(216, 132, 50, 1)",
+        "materialClass": "unknown",
+        "materialClassConfidence": 0.82,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "position": 0,
+              "color": "rgba(143, 62, 32, 1)"
+            },
+            {
+              "position": 1,
+              "color": "rgba(216, 132, 50, 1)"
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      }
+    },
+    {
+      "id": "coral_flower",
+      "name": "Large Coral Flower",
+      "level": "meso",
+      "role": "flower",
+      "importance": 0.85,
+      "confidence": 0.82,
+      "primitive": "ellipsoid",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "Multiple thick curved petals form a non-planar open bloom visible from front and side references.",
+      "geometryDescriptor": {
+        "topologyIntent": "Multiple thick curved petals form a non-planar open bloom visible from front and side references.",
+        "edgeTreatment": {
+          "type": "soft organic edge",
+          "bevelRadius": 0.02,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from continuous geometry"
+      },
+      "parent": "botanical_assembly",
+      "attachment": {
+        "parentId": "botanical_assembly",
+        "parentSocket": "assembly-root",
+        "localStart": [
+          -0.45,
+          -0.1,
+          -0.2
+        ],
+        "localEnd": [
+          -1.2,
+          -0.1,
+          0.15
+        ],
+        "baseRadius": 0.08,
+        "endRadius": 0.03,
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "embedded",
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 0.35,
+        "units": "relative",
+        "confidence": 0.8
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "attachment-root",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.9
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": true,
+          "twist": true,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "sphere",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "plant"
+        }
+      },
+      "material": "coral_petal",
+      "materialLayers": [
+        "coral_petal"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "coral_flower.outer_petals",
+        "coral_flower.petal_ridges",
+        "coral_flower.stamen_cluster"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.08,
+        "bumpAmplitude": 0.03,
+        "normalPattern": "radial organic vein breakup",
+        "displacementPattern": "low-amplitude petal or stem taper",
+        "occlusionPattern": "contact-darkened overlapping roots",
+        "edgeWearPattern": "none",
+        "notes": "Reference-observed organic relief remains geometric at silhouette scale."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "right-view",
+        "rear-view",
+        "left-view"
+      ],
+      "details": [],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(233, 106, 36, 1)",
+        "secondaryAlbedo": "rgba(247, 177, 117, 1)",
+        "materialClass": "unknown",
+        "materialClassConfidence": 0.82,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "position": 0,
+              "color": "rgba(233, 106, 36, 1)"
+            },
+            {
+              "position": 1,
+              "color": "rgba(247, 177, 117, 1)"
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      }
+    },
+    {
+      "id": "orange_flower",
+      "name": "Right Orange Flower",
+      "level": "meso",
+      "role": "flower",
+      "importance": 0.85,
+      "confidence": 0.82,
+      "primitive": "ellipsoid",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "Nested petals occupy real depth around a recessed flower center in a, b, and d.",
+      "geometryDescriptor": {
+        "topologyIntent": "Nested petals occupy real depth around a recessed flower center in a, b, and d.",
+        "edgeTreatment": {
+          "type": "soft organic edge",
+          "bevelRadius": 0.02,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from continuous geometry"
+      },
+      "parent": "botanical_assembly",
+      "attachment": {
+        "parentId": "botanical_assembly",
+        "parentSocket": "assembly-root",
+        "localStart": [
+          0.55,
+          0.4,
+          -0.25
+        ],
+        "localEnd": [
+          1.1,
+          0.5,
+          0.05
+        ],
+        "baseRadius": 0.08,
+        "endRadius": 0.03,
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "embedded",
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 0.35,
+        "units": "relative",
+        "confidence": 0.8
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "attachment-root",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.9
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": true,
+          "twist": true,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "sphere",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "plant"
+        }
+      },
+      "material": "orange_petal",
+      "materialLayers": [
+        "orange_petal"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "orange_flower.nested_petals",
+        "orange_flower.recessed_center"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.08,
+        "bumpAmplitude": 0.03,
+        "normalPattern": "radial organic vein breakup",
+        "displacementPattern": "low-amplitude petal or stem taper",
+        "occlusionPattern": "contact-darkened overlapping roots",
+        "edgeWearPattern": "none",
+        "notes": "Reference-observed organic relief remains geometric at silhouette scale."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "right-view",
+        "rear-view",
+        "left-view"
+      ],
+      "details": [],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(240, 128, 22, 1)",
+        "secondaryAlbedo": "rgba(255, 196, 67, 1)",
+        "materialClass": "unknown",
+        "materialClassConfidence": 0.82,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "position": 0,
+              "color": "rgba(240, 128, 22, 1)"
+            },
+            {
+              "position": 1,
+              "color": "rgba(255, 196, 67, 1)"
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      }
+    },
+    {
+      "id": "pale_bud",
+      "name": "Pale Bud",
+      "level": "meso",
+      "role": "flower",
+      "importance": 0.85,
+      "confidence": 0.82,
+      "primitive": "ellipsoid",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "A closed bud volume with overlapping sepals is visible at left front and rear.",
+      "geometryDescriptor": {
+        "topologyIntent": "A closed bud volume with overlapping sepals is visible at left front and rear.",
+        "edgeTreatment": {
+          "type": "soft organic edge",
+          "bevelRadius": 0.02,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from continuous geometry"
+      },
+      "parent": "botanical_assembly",
+      "attachment": {
+        "parentId": "botanical_assembly",
+        "parentSocket": "assembly-root",
+        "localStart": [
+          -0.6,
+          0.35,
+          -0.3
+        ],
+        "localEnd": [
+          -1.05,
+          0.55,
+          -0.05
+        ],
+        "baseRadius": 0.08,
+        "endRadius": 0.03,
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "embedded",
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 0.35,
+        "units": "relative",
+        "confidence": 0.8
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "attachment-root",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.9
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": true,
+          "twist": true,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "sphere",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "plant"
+        }
+      },
+      "material": "white_petal",
+      "materialLayers": [
+        "white_petal"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "pale_bud.sepal_volume",
+        "pale_bud.closed_petals"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.08,
+        "bumpAmplitude": 0.03,
+        "normalPattern": "radial organic vein breakup",
+        "displacementPattern": "low-amplitude petal or stem taper",
+        "occlusionPattern": "contact-darkened overlapping roots",
+        "edgeWearPattern": "none",
+        "notes": "Reference-observed organic relief remains geometric at silhouette scale."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "right-view",
+        "rear-view",
+        "left-view"
+      ],
+      "details": [],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(242, 233, 215, 1)",
+        "secondaryAlbedo": "rgba(183, 151, 97, 1)",
+        "materialClass": "unknown",
+        "materialClassConfidence": 0.82,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "position": 0,
+              "color": "rgba(242, 233, 215, 1)"
+            },
+            {
+              "position": 1,
+              "color": "rgba(183, 151, 97, 1)"
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      }
+    },
+    {
+      "id": "white_flower_cluster",
+      "name": "White Flower Cluster",
+      "level": "meso",
+      "role": "flower",
+      "importance": 0.85,
+      "confidence": 0.82,
+      "primitive": "ellipsoid",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "Repeated five-petal flowers occupy staggered Z layers and retain volume in b-d.",
+      "geometryDescriptor": {
+        "topologyIntent": "Repeated five-petal flowers occupy staggered Z layers and retain volume in b-d.",
+        "edgeTreatment": {
+          "type": "soft organic edge",
+          "bevelRadius": 0.02,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from continuous geometry"
+      },
+      "parent": "botanical_assembly",
+      "attachment": {
+        "parentId": "botanical_assembly",
+        "parentSocket": "assembly-root",
+        "localStart": [
+          0.35,
+          -0.45,
+          0.1
+        ],
+        "localEnd": [
+          0.85,
+          -1,
+          0.35
+        ],
+        "baseRadius": 0.08,
+        "endRadius": 0.03,
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "embedded",
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 0.35,
+        "units": "relative",
+        "confidence": 0.8
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "attachment-root",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.9
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": true,
+          "twist": true,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "sphere",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "plant"
+        }
+      },
+      "material": "white_petal",
+      "materialLayers": [
+        "white_petal"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "white_flower_cluster.five_petal_repeat",
+        "white_flower_cluster.stamen_centers"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.08,
+        "bumpAmplitude": 0.03,
+        "normalPattern": "radial organic vein breakup",
+        "displacementPattern": "low-amplitude petal or stem taper",
+        "occlusionPattern": "contact-darkened overlapping roots",
+        "edgeWearPattern": "none",
+        "notes": "Reference-observed organic relief remains geometric at silhouette scale."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "right-view",
+        "rear-view",
+        "left-view"
+      ],
+      "details": [],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(242, 233, 215, 1)",
+        "secondaryAlbedo": "rgba(255, 253, 244, 1)",
+        "materialClass": "unknown",
+        "materialClassConfidence": 0.82,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "position": 0,
+              "color": "rgba(242, 233, 215, 1)"
+            },
+            {
+              "position": 1,
+              "color": "rgba(255, 253, 244, 1)"
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      }
+    },
+    {
+      "id": "burgundy_cluster",
+      "name": "Burgundy Flower Cluster",
+      "level": "meso",
+      "role": "flower",
+      "importance": 0.85,
+      "confidence": 0.82,
+      "primitive": "ellipsoid",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "Layered dark petals form a shallow but volumetric cluster below the jar.",
+      "geometryDescriptor": {
+        "topologyIntent": "Layered dark petals form a shallow but volumetric cluster below the jar.",
+        "edgeTreatment": {
+          "type": "soft organic edge",
+          "bevelRadius": 0.02,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from continuous geometry"
+      },
+      "parent": "botanical_assembly",
+      "attachment": {
+        "parentId": "botanical_assembly",
+        "parentSocket": "assembly-root",
+        "localStart": [
+          0,
+          -0.35,
+          0.05
+        ],
+        "localEnd": [
+          -0.15,
+          -0.8,
+          0.28
+        ],
+        "baseRadius": 0.08,
+        "endRadius": 0.03,
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "embedded",
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 0.35,
+        "units": "relative",
+        "confidence": 0.8
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "attachment-root",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.9
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": true,
+          "twist": true,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "sphere",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "plant"
+        }
+      },
+      "material": "burgundy_petal",
+      "materialLayers": [
+        "burgundy_petal"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "burgundy_cluster.layered_petals",
+        "burgundy_cluster.green_centers"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.08,
+        "bumpAmplitude": 0.03,
+        "normalPattern": "radial organic vein breakup",
+        "displacementPattern": "low-amplitude petal or stem taper",
+        "occlusionPattern": "contact-darkened overlapping roots",
+        "edgeWearPattern": "none",
+        "notes": "Reference-observed organic relief remains geometric at silhouette scale."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "right-view",
+        "rear-view",
+        "left-view"
+      ],
+      "details": [],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(76, 23, 23, 1)",
+        "secondaryAlbedo": "rgba(122, 44, 34, 1)",
+        "materialClass": "unknown",
+        "materialClassConfidence": 0.82,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "position": 0,
+              "color": "rgba(76, 23, 23, 1)"
+            },
+            {
+              "position": 1,
+              "color": "rgba(122, 44, 34, 1)"
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      }
+    },
+    {
+      "id": "lower_pods",
+      "name": "Lower Pod Fan",
+      "level": "meso",
+      "role": "leaf",
+      "importance": 0.85,
+      "confidence": 0.82,
+      "primitive": "extrude",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Thick leaf and pod shells fan below the jar with central veins and visible edge depth.",
+      "geometryDescriptor": {
+        "topologyIntent": "Thick leaf and pod shells fan below the jar with central veins and visible edge depth.",
+        "edgeTreatment": {
+          "type": "soft organic edge",
+          "bevelRadius": 0.02,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from continuous geometry"
+      },
+      "parent": "botanical_assembly",
+      "attachment": {
+        "parentId": "botanical_assembly",
+        "parentSocket": "assembly-root",
+        "localStart": [
+          0,
+          -0.35,
+          -0.1
+        ],
+        "localEnd": [
+          0,
+          -1.35,
+          0.18
+        ],
+        "baseRadius": 0.08,
+        "endRadius": 0.03,
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "embedded",
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 0.35,
+        "units": "relative",
+        "confidence": 0.8
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "attachment-root",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.9
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": true,
+          "twist": true,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "sphere",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "plant"
+        }
+      },
+      "material": "leaf_material",
+      "materialLayers": [
+        "leaf_material"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "lower_pods.green_pair",
+        "lower_pods.central_veins",
+        "lower_pods.hanging_bud"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.08,
+        "bumpAmplitude": 0.03,
+        "normalPattern": "radial organic vein breakup",
+        "displacementPattern": "low-amplitude petal or stem taper",
+        "occlusionPattern": "contact-darkened overlapping roots",
+        "edgeWearPattern": "none",
+        "notes": "Reference-observed organic relief remains geometric at silhouette scale."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "right-view",
+        "rear-view",
+        "left-view"
+      ],
+      "details": [],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(114, 117, 43, 1)",
+        "secondaryAlbedo": "rgba(167, 139, 57, 1)",
+        "materialClass": "unknown",
+        "materialClassConfidence": 0.82,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "position": 0,
+              "color": "rgba(114, 117, 43, 1)"
+            },
+            {
+              "position": 1,
+              "color": "rgba(167, 139, 57, 1)"
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      }
+    },
+    {
+      "id": "side_spike",
+      "name": "Right Side Spike",
+      "level": "meso",
+      "role": "branch",
+      "importance": 0.85,
+      "confidence": 0.82,
+      "primitive": "tube",
+      "topologyClass": "fiber-strand",
+      "topologyRationale": "A short curved stem and overlapping bracts extend laterally from the right socket.",
+      "geometryDescriptor": {
+        "topologyIntent": "A short curved stem and overlapping bracts extend laterally from the right socket.",
+        "edgeTreatment": {
+          "type": "soft organic edge",
+          "bevelRadius": 0.02,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from continuous geometry"
+      },
+      "parent": "botanical_assembly",
+      "attachment": {
+        "parentId": "botanical_assembly",
+        "parentSocket": "assembly-root",
+        "localStart": [
+          0.55,
+          0.05,
+          -0.15
+        ],
+        "localEnd": [
+          1.35,
+          -0.15,
+          0.05
+        ],
+        "baseRadius": 0.08,
+        "endRadius": 0.03,
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "embedded",
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 0.35,
+        "units": "relative",
+        "confidence": 0.8
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "attachment-root",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.9
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": true,
+          "twist": true,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "sphere",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "plant"
+        }
+      },
+      "material": "stem_material",
+      "materialLayers": [
+        "stem_material"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "side_spike.bract_cluster",
+        "side_spike.curved_tube"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.08,
+        "bumpAmplitude": 0.03,
+        "normalPattern": "radial organic vein breakup",
+        "displacementPattern": "low-amplitude petal or stem taper",
+        "occlusionPattern": "contact-darkened overlapping roots",
+        "edgeWearPattern": "none",
+        "notes": "Reference-observed organic relief remains geometric at silhouette scale."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "right-view",
+        "rear-view",
+        "left-view"
+      ],
+      "details": [],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(143, 62, 32, 1)",
+        "secondaryAlbedo": "rgba(216, 132, 50, 1)",
+        "materialClass": "unknown",
+        "materialClassConfidence": 0.82,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "position": 0,
+              "color": "rgba(143, 62, 32, 1)"
+            },
+            {
+              "position": 1,
+              "color": "rgba(216, 132, 50, 1)"
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "front-view",
+          "right-view",
+          "rear-view",
+          "left-view"
+        ]
+      }
+    }
+  ],
+  "materials": [
+    {
+      "id": "utility_root",
+      "name": "Invisible assembly utility",
+      "type": "physical",
+      "shaderModel": "MeshPhysicalMaterial / PBR approximation",
+      "qualityTier": "utility",
+      "baseColor": "#000000",
+      "color": "#000000",
+      "albedo": {
+        "dominant": "#000000",
+        "secondary": [
+          "#111111"
+        ],
+        "samplingNotes": "Colors sampled by direct visual comparison against a-d references."
+      },
+      "colorVariation": {
+        "palette": [
+          "#000000",
+          "#111111"
+        ],
+        "pattern": "deterministic regional variation",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.2
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "procedural-object-space",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "Stable object-space relief independent of component scaling."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.18,
+          "role": "broad hue variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.1,
+          "role": "petal and leaf veins"
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.035,
+          "role": "highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 1,
+        "variation": 0.12,
+        "map": "independent-procedural-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "independent-organic-vein-field",
+        "strength": 0.22,
+        "scale": 22,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "independent-fine-ridge-field",
+        "amplitude": 0.025,
+        "scale": 28
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28,
+        "contactShadowBias": 0.4,
+        "notes": "Overlap roots and petal folds."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.02,
+        "cavityBias": 0.2,
+        "color": "#111111"
+      },
+      "localOverrides": [],
+      "shaderNotes": [
+        "Independent albedo, roughness, normal, and AO responses."
+      ],
+      "notes": "Real-time procedural material; exact photo microtexture is intentionally not projected."
+    },
+    {
+      "id": "jar_glass",
+      "name": "Amber jar glass",
+      "type": "physical",
+      "shaderModel": "MeshPhysicalMaterial / PBR approximation",
+      "qualityTier": "utility",
+      "baseColor": "#C74321",
+      "color": "#C74321",
+      "albedo": {
+        "dominant": "#C74321",
+        "secondary": [
+          "#F1B967"
+        ],
+        "samplingNotes": "Colors sampled by direct visual comparison against a-d references."
+      },
+      "colorVariation": {
+        "palette": [
+          "#C74321",
+          "#F1B967"
+        ],
+        "pattern": "deterministic regional variation",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.2
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "procedural-object-space",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "Stable object-space relief independent of component scaling."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.18,
+          "role": "broad hue variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.1,
+          "role": "petal and leaf veins"
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.035,
+          "role": "highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.08,
+        "variation": 0.12,
+        "map": "independent-procedural-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "independent-organic-vein-field",
+        "strength": 0.22,
+        "scale": 22,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "independent-fine-ridge-field",
+        "amplitude": 0.025,
+        "scale": 28
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28,
+        "contactShadowBias": 0.4,
+        "notes": "Overlap roots and petal folds."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.02,
+        "cavityBias": 0.2,
+        "color": "#F1B967"
+      },
+      "localOverrides": [],
+      "shaderNotes": [
+        "Independent albedo, roughness, normal, and AO responses."
+      ],
+      "notes": "Real-time procedural material; exact photo microtexture is intentionally not projected."
+    },
+    {
+      "id": "cap_gold",
+      "name": "Champagne cap",
+      "type": "physical",
+      "shaderModel": "MeshPhysicalMaterial / PBR approximation",
+      "qualityTier": "utility",
+      "baseColor": "#D8C093",
+      "color": "#D8C093",
+      "albedo": {
+        "dominant": "#D8C093",
+        "secondary": [
+          "#F0E3C2"
+        ],
+        "samplingNotes": "Colors sampled by direct visual comparison against a-d references."
+      },
+      "colorVariation": {
+        "palette": [
+          "#D8C093",
+          "#F0E3C2"
+        ],
+        "pattern": "deterministic regional variation",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.2
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "procedural-object-space",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "Stable object-space relief independent of component scaling."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.18,
+          "role": "broad hue variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.1,
+          "role": "petal and leaf veins"
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.035,
+          "role": "highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.24,
+        "variation": 0.12,
+        "map": "independent-procedural-roughness"
+      },
+      "metalness": {
+        "base": 0.85,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "independent-organic-vein-field",
+        "strength": 0.22,
+        "scale": 22,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "independent-fine-ridge-field",
+        "amplitude": 0.025,
+        "scale": 28
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28,
+        "contactShadowBias": 0.4,
+        "notes": "Overlap roots and petal folds."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.02,
+        "cavityBias": 0.2,
+        "color": "#F0E3C2"
+      },
+      "localOverrides": [],
+      "shaderNotes": [
+        "Independent albedo, roughness, normal, and AO responses."
+      ],
+      "notes": "Real-time procedural material; exact photo microtexture is intentionally not projected."
+    },
+    {
+      "id": "coral_petal",
+      "name": "Coral petal",
+      "type": "physical",
+      "shaderModel": "MeshPhysicalMaterial / PBR approximation",
+      "qualityTier": "utility",
+      "baseColor": "#E96A24",
+      "color": "#E96A24",
+      "albedo": {
+        "dominant": "#E96A24",
+        "secondary": [
+          "#F7B175"
+        ],
+        "samplingNotes": "Colors sampled by direct visual comparison against a-d references."
+      },
+      "colorVariation": {
+        "palette": [
+          "#E96A24",
+          "#F7B175"
+        ],
+        "pattern": "deterministic regional variation",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.2
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "procedural-object-space",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "Stable object-space relief independent of component scaling."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.18,
+          "role": "broad hue variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.1,
+          "role": "petal and leaf veins"
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.035,
+          "role": "highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.48,
+        "variation": 0.12,
+        "map": "independent-procedural-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "independent-organic-vein-field",
+        "strength": 0.22,
+        "scale": 22,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "independent-fine-ridge-field",
+        "amplitude": 0.025,
+        "scale": 28
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28,
+        "contactShadowBias": 0.4,
+        "notes": "Overlap roots and petal folds."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.02,
+        "cavityBias": 0.2,
+        "color": "#F7B175"
+      },
+      "localOverrides": [
+        {
+          "id": "coral_petal_gradient",
+          "region": "petal tips",
+          "roughness": 0.42
+        }
+      ],
+      "shaderNotes": [
+        "Independent albedo, roughness, normal, and AO responses."
+      ],
+      "notes": "Real-time procedural material; exact photo microtexture is intentionally not projected."
+    },
+    {
+      "id": "orange_petal",
+      "name": "Orange petal",
+      "type": "physical",
+      "shaderModel": "MeshPhysicalMaterial / PBR approximation",
+      "qualityTier": "utility",
+      "baseColor": "#F08016",
+      "color": "#F08016",
+      "albedo": {
+        "dominant": "#F08016",
+        "secondary": [
+          "#FFC443"
+        ],
+        "samplingNotes": "Colors sampled by direct visual comparison against a-d references."
+      },
+      "colorVariation": {
+        "palette": [
+          "#F08016",
+          "#FFC443"
+        ],
+        "pattern": "deterministic regional variation",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.2
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "procedural-object-space",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "Stable object-space relief independent of component scaling."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.18,
+          "role": "broad hue variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.1,
+          "role": "petal and leaf veins"
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.035,
+          "role": "highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.45,
+        "variation": 0.12,
+        "map": "independent-procedural-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "independent-organic-vein-field",
+        "strength": 0.22,
+        "scale": 22,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "independent-fine-ridge-field",
+        "amplitude": 0.025,
+        "scale": 28
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28,
+        "contactShadowBias": 0.4,
+        "notes": "Overlap roots and petal folds."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.02,
+        "cavityBias": 0.2,
+        "color": "#FFC443"
+      },
+      "localOverrides": [],
+      "shaderNotes": [
+        "Independent albedo, roughness, normal, and AO responses."
+      ],
+      "notes": "Real-time procedural material; exact photo microtexture is intentionally not projected."
+    },
+    {
+      "id": "white_petal",
+      "name": "White petal",
+      "type": "physical",
+      "shaderModel": "MeshPhysicalMaterial / PBR approximation",
+      "qualityTier": "utility",
+      "baseColor": "#F2E9D7",
+      "color": "#F2E9D7",
+      "albedo": {
+        "dominant": "#F2E9D7",
+        "secondary": [
+          "#FFFDF4"
+        ],
+        "samplingNotes": "Colors sampled by direct visual comparison against a-d references."
+      },
+      "colorVariation": {
+        "palette": [
+          "#F2E9D7",
+          "#FFFDF4"
+        ],
+        "pattern": "deterministic regional variation",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.2
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "procedural-object-space",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "Stable object-space relief independent of component scaling."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.18,
+          "role": "broad hue variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.1,
+          "role": "petal and leaf veins"
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.035,
+          "role": "highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.55,
+        "variation": 0.12,
+        "map": "independent-procedural-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "independent-organic-vein-field",
+        "strength": 0.22,
+        "scale": 22,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "independent-fine-ridge-field",
+        "amplitude": 0.025,
+        "scale": 28
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28,
+        "contactShadowBias": 0.4,
+        "notes": "Overlap roots and petal folds."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.02,
+        "cavityBias": 0.2,
+        "color": "#FFFDF4"
+      },
+      "localOverrides": [],
+      "shaderNotes": [
+        "Independent albedo, roughness, normal, and AO responses."
+      ],
+      "notes": "Real-time procedural material; exact photo microtexture is intentionally not projected."
+    },
+    {
+      "id": "stem_material",
+      "name": "Ginseng stem and bracts",
+      "type": "physical",
+      "shaderModel": "MeshPhysicalMaterial / PBR approximation",
+      "qualityTier": "utility",
+      "baseColor": "#8F3E20",
+      "color": "#8F3E20",
+      "albedo": {
+        "dominant": "#8F3E20",
+        "secondary": [
+          "#D88432"
+        ],
+        "samplingNotes": "Colors sampled by direct visual comparison against a-d references."
+      },
+      "colorVariation": {
+        "palette": [
+          "#8F3E20",
+          "#D88432"
+        ],
+        "pattern": "deterministic regional variation",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.2
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "procedural-object-space",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "Stable object-space relief independent of component scaling."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.18,
+          "role": "broad hue variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.1,
+          "role": "petal and leaf veins"
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.035,
+          "role": "highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.62,
+        "variation": 0.12,
+        "map": "independent-procedural-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "independent-organic-vein-field",
+        "strength": 0.22,
+        "scale": 22,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "independent-fine-ridge-field",
+        "amplitude": 0.025,
+        "scale": 28
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28,
+        "contactShadowBias": 0.4,
+        "notes": "Overlap roots and petal folds."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.02,
+        "cavityBias": 0.2,
+        "color": "#D88432"
+      },
+      "localOverrides": [
+        {
+          "id": "stem_material.bract_gradient",
+          "region": "bract tips",
+          "roughness": 0.56
+        }
+      ],
+      "shaderNotes": [
+        "Independent albedo, roughness, normal, and AO responses."
+      ],
+      "notes": "Real-time procedural material; exact photo microtexture is intentionally not projected."
+    },
+    {
+      "id": "leaf_material",
+      "name": "Olive leaf and pod",
+      "type": "physical",
+      "shaderModel": "MeshPhysicalMaterial / PBR approximation",
+      "qualityTier": "utility",
+      "baseColor": "#72752B",
+      "color": "#72752B",
+      "albedo": {
+        "dominant": "#72752B",
+        "secondary": [
+          "#A78B39"
+        ],
+        "samplingNotes": "Colors sampled by direct visual comparison against a-d references."
+      },
+      "colorVariation": {
+        "palette": [
+          "#72752B",
+          "#A78B39"
+        ],
+        "pattern": "deterministic regional variation",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.2
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "procedural-object-space",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "Stable object-space relief independent of component scaling."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.18,
+          "role": "broad hue variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.1,
+          "role": "petal and leaf veins"
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.035,
+          "role": "highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.67,
+        "variation": 0.12,
+        "map": "independent-procedural-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "independent-organic-vein-field",
+        "strength": 0.22,
+        "scale": 22,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "independent-fine-ridge-field",
+        "amplitude": 0.025,
+        "scale": 28
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28,
+        "contactShadowBias": 0.4,
+        "notes": "Overlap roots and petal folds."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.02,
+        "cavityBias": 0.2,
+        "color": "#A78B39"
+      },
+      "localOverrides": [
+        {
+          "id": "leaf_material.brown_pod_gradient",
+          "region": "lower brown pods",
+          "roughness": 0.7
+        }
+      ],
+      "shaderNotes": [
+        "Independent albedo, roughness, normal, and AO responses."
+      ],
+      "notes": "Real-time procedural material; exact photo microtexture is intentionally not projected."
+    },
+    {
+      "id": "burgundy_petal",
+      "name": "Burgundy petal",
+      "type": "physical",
+      "shaderModel": "MeshPhysicalMaterial / PBR approximation",
+      "qualityTier": "utility",
+      "baseColor": "#4C1717",
+      "color": "#4C1717",
+      "albedo": {
+        "dominant": "#4C1717",
+        "secondary": [
+          "#7A2C22"
+        ],
+        "samplingNotes": "Colors sampled by direct visual comparison against a-d references."
+      },
+      "colorVariation": {
+        "palette": [
+          "#4C1717",
+          "#7A2C22"
+        ],
+        "pattern": "deterministic regional variation",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.2
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "procedural-object-space",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "Stable object-space relief independent of component scaling."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.18,
+          "role": "broad hue variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.1,
+          "role": "petal and leaf veins"
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.035,
+          "role": "highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.58,
+        "variation": 0.12,
+        "map": "independent-procedural-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "independent-organic-vein-field",
+        "strength": 0.22,
+        "scale": 22,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "independent-fine-ridge-field",
+        "amplitude": 0.025,
+        "scale": 28
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28,
+        "contactShadowBias": 0.4,
+        "notes": "Overlap roots and petal folds."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.02,
+        "cavityBias": 0.2,
+        "color": "#7A2C22"
+      },
+      "localOverrides": [],
+      "shaderNotes": [
+        "Independent albedo, roughness, normal, and AO responses."
+      ],
+      "notes": "Real-time procedural material; exact photo microtexture is intentionally not projected."
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "ginseng_bracts",
+      "componentRef": "ginseng_spike",
+      "realization": "instanced-geometry",
+      "buildsGeometry": true,
+      "geometry": "tapered ellipsoid bracts",
+      "instances": 36,
+      "distribution": "paired along CatmullRomCurve3 with deterministic alternating roll",
+      "evidenceRefs": [
+        "front-view",
+        "right-view"
+      ]
+    },
+    {
+      "id": "white_flower_repeat",
+      "componentRef": "white_flower_cluster",
+      "realization": "instanced-geometry",
+      "buildsGeometry": true,
+      "geometry": "five ellipsoid petals plus raised center",
+      "instances": 10,
+      "distribution": "irregular ellipsoidal cluster with deterministic scale and Z offsets",
+      "evidenceRefs": [
+        "front-view",
+        "right-view",
+        "rear-view"
+      ]
+    },
+    {
+      "id": "petal_rings",
+      "componentRef": "coral_flower",
+      "realization": "repeated-geometry",
+      "buildsGeometry": true,
+      "geometry": "two overlapping radial petal rings",
+      "instances": 18,
+      "distribution": "nonuniform radial spacing, alternating depth and curl",
+      "evidenceRefs": [
+        "front-view",
+        "left-view"
+      ]
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Match macro silhouette and proportions.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Silhouette reads correctly without materials.",
+        "Quality contract has named all required macro feature groups before code generation.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build the component hierarchy implied by the pre-spec complexity assessment.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Macro, meso, and repeated structures meet qualityContract.minimumSpecDepth.",
+        "Parent-child relations, joints, seams, sockets, and contact points are explicit.",
+        "Every attached child appendage/connector has parentSocket, localStart/localEnd, contactType, embedDepth or overlap, and gapTolerance.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine shape, deformation, bevels, tapers, curves, asymmetry, and visible local geometry.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Important visible forms are represented in component geometryDescriptor, deformations, localFeatures, or repetitionSystems.",
+        "Endpoint-based child parts are rooted at their attachment sockets and do not visibly float away from parents.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Match material color, roughness, bump, and local variation.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Reference-derived albedo palette records dominant, secondary, and accent colors per visible material.",
+        "Each important material defines roughness variation and at least one normal/bump/displacement response.",
+        "Local material overrides, dirt/wear/stains/moss/chips/scratches or equivalent masks are tied to evidenceRefs.",
+        "Thin, transparent, reflective, wet, or fibrous materials document alpha/transmission/clearcoat/metalness/fiber response when relevant.",
+        "Generated preview uses procedural albedo/roughness/bump texture or vertex color variation instead of one flat color.",
+        "Generated preview uses independent PBR maps at 1024px or higher for the quality-first tier.",
+        "If source pixels are available, referencePbr extraction passed at confidence >= 0.7 or the pass is stopped/requesting better references.",
+        "Macro, meso, and micro surface frequency bands are visible at the intended review distance without obvious tiling.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "surface-pass",
+      "goal": "Add procedural surface locality such as normal/bump/displacement, AO, dirt, stains, chips, grain, moss, scratches, and wear.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Every required material feature group has local overrides or surfaceDetail tied to evidenceRefs.",
+        "A grazing-angle close-up proves that normal/height detail breaks highlights naturally and does not read as smooth plastic.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Make material and form readable under neutral turntable lighting plus optional reference lighting.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "lightingFromPhoto identifies key light direction/color/intensity, fill light, rim or environment light, and ambient color.",
+        "Exposure, tone mapping, background color/gradient, shadow softness, and contact shadow behavior are specified.",
+        "Lighting does not hide geometry/material gaps and screenshots can be compared fairly to the reference.",
+        "Neutral, grazing, and reference-matched lighting checks distinguish material errors from lighting errors.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Make the model ready for future animation, transformation, physics, or destruction.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Macro and movable meso components have stable pivot nodes.",
+        "Sockets, collider proxies, and destruction metadata are present for future runtime actions.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Protect runtime performance after visual fidelity is accepted.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Triangle count, draw calls, instancing, LOD strategy, and FPS target are documented or verified.",
+        "Repeated detail is instanced or simplified where possible without breaking silhouette/material believability."
+      ]
+    }
+  ],
+  "visualEvidence": [
+    {
+      "timestamp": "2026-08-06T14:16:03.843258+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.81,
+      "aiVisionScore": 0.81,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.82,
+        "componentStructure": 0.88,
+        "formDetail": 0.78,
+        "materialSurface": 0.66,
+        "lightingCamera": 0.8
+      },
+      "featureReviews": [
+        {
+          "id": "botanical-orbit-volume",
+          "score": 0.86,
+          "visible": true,
+          "notes": "0/90/180/270도에서 꽃잎 옆면, 원통형 줄기, 포엽 겹침이 유지되고 평면 카드처럼 붕괴하지 않는다."
+        }
+      ],
+      "referenceScreenshot": "img/a.png",
+      "renderScreenshot": ".review/botanical_model_000.png",
+      "comparisonImage": ".review/botanical_comparison.png",
+      "cameraView": "front plus 0/90/180/270 orbit",
+      "notes": "Text excluded by user request; model-only capture reviewed.",
+      "aiVisionNotes": "The model reproduces the circular botanical hierarchy and passes volumetric orbit review. Large petals are intentionally simplified real-time extrusions rather than photographic micro-surface copies."
+    }
+  ],
+  "reviewHistory": [
+    {
+      "timestamp": "2026-08-06T14:16:03.843258+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.81,
+      "aiVisionScore": 0.81,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.82,
+        "componentStructure": 0.88,
+        "formDetail": 0.78,
+        "materialSurface": 0.66,
+        "lightingCamera": 0.8
+      },
+      "featureReviews": [
+        {
+          "id": "botanical-orbit-volume",
+          "score": 0.86,
+          "visible": true,
+          "notes": "0/90/180/270도에서 꽃잎 옆면, 원통형 줄기, 포엽 겹침이 유지되고 평면 카드처럼 붕괴하지 않는다."
+        }
+      ],
+      "action": "stop",
+      "summary": "User-scoped real-time 3D botanical assembly is complete; four-angle volume and shared-root rotation are verified.",
+      "matched": [
+        "Front botanical hierarchy matches the reference composition",
+        "Flower, leaf, white cluster, and ginseng systems remain volumetric across four angles",
+        "All botanical parts rotate with the cream jar"
+      ],
+      "mismatches": [
+        "Procedural petals omit the photograph's fine wrinkles and fibrous microtexture",
+        "Direct photo-to-render Tier 1 pixel gate is not calibrated for the different background and procedural shading"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [
+        ".review/botanical_model_000.png",
+        ".review/botanical_model_090.png",
+        ".review/botanical_model_180.png",
+        ".review/botanical_model_270.png",
+        ".img2threejs-botanical/review.md"
+      ],
+      "mapStrippedRender": ".review/botanical_model_map_stripped.png",
+      "reviewViewpoints": [
+        "front",
+        "right",
+        "rear",
+        "left",
+        "thickness-axis",
+        "long-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "img/a.png",
+        "renderScreenshot": ".review/botanical_model_000.png",
+        "comparisonImage": ".review/botanical_comparison.png",
+        "cameraView": "front plus 0/90/180/270 orbit",
+        "notes": "Text excluded by user request; model-only capture reviewed.",
+        "aiVisionNotes": "The model reproduces the circular botanical hierarchy and passes volumetric orbit review. Large petals are intentionally simplified real-time extrusions rather than photographic micro-surface copies."
+      }
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full component tree and material layers"
+    },
+    {
+      "tier": "far",
+      "distance": 30,
+      "strategy": "merge static components and reduce local feature geometry"
+    }
+  ],
+  "performanceBudget": {
+    "qualityPriority": "reference-fidelity",
+    "targetTriangles": 250000,
+    "maxDrawCalls": 160,
+    "textureSize": 2048,
+    "fpsTarget": 30,
+    "optimizationPolicy": "Reach accepted visual fidelity first, then optimize without removing reference-critical geometry or surface layers."
+  },
+  "lightingFromPhoto": [
+    {
+      "role": "key light",
+      "direction": [
+        3,
+        5,
+        4
+      ],
+      "color": "#fff2e0",
+      "intensity": 1.1,
+      "note": "Warm form-defining key."
+    },
+    {
+      "role": "fill light",
+      "direction": [
+        -4,
+        2,
+        2
+      ],
+      "color": "#fff8ed",
+      "intensity": 0.35,
+      "note": "Soft fill for petal cavities."
+    },
+    {
+      "role": "rim environment",
+      "direction": [
+        -4,
+        2,
+        -3
+      ],
+      "color": "#ffd9a0",
+      "intensity": 0.7,
+      "exposure": 1.15,
+      "toneMapping": "ACES Filmic",
+      "contactShadow": "soft ambient occlusion ground shadow"
+    }
+  ],
+  "proceduralStrategy": [
+    "Block out macro silhouette first.",
+    "Add component hierarchy and joints.",
+    "Create stable pivot groups, sockets, collider proxies, and destruction metadata before visual polish.",
+    "Refine forms with bevels, tapers, bends, and procedural noise.",
+    "Run reference PBR extraction for important source-image materials and stop when confidence is below the target threshold.",
+    "Add material variation before adding expensive micro-geometry."
+  ],
+  "animationAnchors": [
+    "root pivot node supports whole-object translation, rotation, scale, and visibility changes",
+    "component pivot groups support later local transforms without rebuilding geometry"
+  ],
+  "destructionAnchors": [
+    "actionProfile.destruction.fractureGroup marks detachable or breakable component sets",
+    "component seams and sockets define plausible break points instead of random explosions"
+  ],
+  "risks": [],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "Botanical Cream Assembly botanical flower petals leaves stem curve tube instanced cluster branch attachment embedded tube curve parent socket flower",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "ac4f0bc9028e34083dbb5d5531ae3df7699c8e7641d5f8e6d42e7492ea1be1d0"
+    },
+    "matches": [
+      {
+        "record_id": "core.attachment-contract",
+        "file_path": "grimoire/readiness/joint_attachment.md",
+        "heading": "Attachment Contract",
+        "key_path": null,
+        "score": 15.033976638729,
+        "snippets": [
+          "An attached child records its parent, parent socket, local start and end, contact type, and embed depth or overlap where applicable."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/readiness/joint_attachment.md",
+            "heading": "Attachment Contract",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/joint_attachment.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.socket-pivot",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Animation, Physics, And Destruction",
+        "key_path": null,
+        "score": 8.809409158926,
+        "snippets": [
+          "A pivot is a local rotation origin; a socket is an attachment point for a child part. In a runtime hierarchy, a socket Object3D is a child of the relevant pivot."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Animation, Physics, And Destruction",
+            "key_path": null
+          },
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.shader-mapping-uvcoordinate-system-conversion-attachment-hierarchy",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.rendering_shader_mapping[14]",
+        "score": 8.025563625954,
+        "snippets": [
+          "Handling handedness/up-axis differences (Unity Y-up left-handed vs. USD/glTF right-handed) and representing sub-part attachment via parent-child scene-graph transforms. Xử lý khác biệt tay thuận/trục lên (Unity Y-up trái vs. USD/glTF phải) và ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.rendering_shader_mapping[14]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      }
+    ]
+  },
+  "tier1Results": [
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.5443,
+        "aspectRatioDelta": 0.0681,
+        "scaleDelta": 0.1145,
+        "bilateralSymmetryError": 0.1373,
+        "colorDelta": {
+          "checked": 9,
+          "maxDeltaE": 38.02,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 26.96
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 34.76
+            },
+            {
+              "componentId": null,
+              "deltaE": 32.93
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.71
+            },
+            {
+              "componentId": null,
+              "deltaE": 38.02
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.55
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.544 is below threshold 0.85",
+        "aspect-ratio delta 0.068 exceeds threshold 0.05",
+        "scale delta 0.115 exceeds threshold 0.08",
+        "blockout requires --map-stripped-render evidence"
+      ],
+      "maskWarnings": [],
+      "renderHash": "6da51b21d7920624",
+      "passId": "blockout"
+    }
+  ]
+}

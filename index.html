@@ -3,9 +3,1006 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>뚜레주르</title>
+  <title>Sulwhasoo — Concentrated Ginseng</title>
+  <style>
+    :root {
+      --bg: #f6efe6;
+      --ink: #2a1d12;
+      --accent: #a8703a;
+      --copy_measure: 26rem;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: auto; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Nanum Myeongjo", "Apple SD Gothic Neo", "Malgun Gothic", serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* 캔버스는 고정, 스크롤은 아래 섹션들이 만든다 */
+    #scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: grid;
+      place-items: center;
+      background: var(--bg);
+      transition: opacity .8s ease;
+      letter-spacing: .3em;
+      font-size: 12px;
+      color: var(--accent);
+    }
+    #loader.is_hidden { opacity: 0; pointer-events: none; }
+
+    #track { position: relative; z-index: 1; }
+
+    section {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      padding: 0 8vw;
+      pointer-events: none;
+    }
+    section .copy {
+      width: min(100%, var(--copy_measure));
+      max-width: var(--copy_measure);
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .9s ease, transform .9s ease;
+    }
+    section.is_visible .copy { opacity: 1; transform: none; }
+
+    section:nth-child(even) { justify-content: flex-end; text-align: right; }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: .38em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.4rem;
+    }
+    h1, h2 {
+      font-weight: 400;
+      font-size: clamp(2rem, 4.4vw, 3.6rem);
+      line-height: 1.25;
+      margin-bottom: 1.2rem;
+    }
+    p {
+      font-size: clamp(.9rem, 1.1vw, 1.05rem);
+      line-height: 2;
+      opacity: .72;
+    }
+    h1, h2, p {
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    .scroll_hint {
+      position: fixed;
+      bottom: 3vh; left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      font-size: 10px;
+      letter-spacing: .35em;
+      color: var(--accent);
+      transition: opacity .5s ease;
+    }
+    .scroll_hint::after {
+      content: '';
+      display: block;
+      width: 1px; height: 40px;
+      margin: 12px auto 0;
+      background: linear-gradient(var(--accent), transparent);
+      animation: drop 2s ease-in-out infinite;
+    }
+    @keyframes drop {
+      0%   { transform: scaleY(0); transform-origin: top; }
+      45%  { transform: scaleY(1); transform-origin: top; }
+      55%  { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    @media (max-width: 899px) {
+      section {
+        align-items: flex-start;
+        padding: max(64px, 8dvh) 24px 0;
+      }
+      section .copy {
+        width: min(100%, 30ch);
+        max-width: 30ch;
+      }
+      h1, h2 { font-size: clamp(2rem, 11vw, 2.75rem); }
+      p { font-size: .9rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #loader,
+      section .copy,
+      .scroll_hint {
+        transition: none;
+      }
+      .scroll_hint::after {
+        animation: none;
+        transform: scaleY(1);
+      }
+    }
+  </style>
 </head>
 <body>
-  
+  <div id="loader" role="status" aria-live="polite">LOADING</div>
+  <canvas id="scene" aria-hidden="true"></canvas>
+
+  <div id="track">
+    <section>
+      <div class="copy">
+        <div class="eyebrow">Sulwhasoo</div>
+        <h1>자음생크림<br>리치</h1>
+        <p>진한 밀도로 감싸는 인삼의 정수.<br>피부 본연의 생기를 되살리는 시간.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="copy">
+        <div class="eyebrow">Concentrated Ginseng</div>
+        <h2>농축 인삼<br>사포닌</h2>
+        <p>오랜 시간 축적된 인삼 연구가<br>한 알의 밀도로 응축되었습니다.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="copy">
+        <div class="eyebrow">Texture</div>
+        <h2>호박빛 결</h2>
+        <p>부드럽게 녹아드는 리치 텍스처가<br>피부 위에서 얇은 막을 이룹니다.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="copy">
+        <div class="eyebrow">Rejuvenating</div>
+        <h2>다시,<br>피어나다</h2>
+        <p>매일 밤의 의식. 아침의 피부가 답합니다.</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="scroll_hint" id="hint" aria-hidden="true">SCROLL</div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+    const canvas = document.getElementById('scene');
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(35, innerWidth / innerHeight, 0.1, 100);
+    camera.position.set(0, 0.15, 5.0);
+    camera.lookAt(0, 0, 0);
+
+    // 유리 재질은 환경광이 전부다. RoomEnvironment로 스튜디오 반사를 만든다.
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+    // 조명이 세면 실측 램프 위에 흰 스페큘러가 얹혀 상단이 분홍으로 날아간다.
+    // 색은 램프가 결정하게 두고, 빛은 형태를 읽히게 할 만큼만.
+    const key = new THREE.DirectionalLight(0xfff2e0, 1.1);
+    key.position.set(3, 5, 4);
+    scene.add(key);
+
+    const rim = new THREE.DirectionalLight(0xffd9a0, 0.7);
+    rim.position.set(-4, 2, -3);
+    scene.add(rim);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.22));
+
+    // ---------------------------------------------------------------
+    // 용기: 회전대칭이므로 실루엣 프로파일 하나로 Lathe 생성
+    // ---------------------------------------------------------------
+    const product = new THREE.Group();
+    scene.add(product);
+    const creamJar = new THREE.Group();
+    creamJar.name = 'cream-jar';
+    product.add(creamJar);
+
+    function lathePoints(pairs) {
+      return pairs.map(([x, y]) => new THREE.Vector2(x, y));
+    }
+
+    // ---------------------------------------------------------------
+    // 지오메트리는 눈대중이 아니라 img/e.png 알파 실루엣에서 측정한 값이다.
+    // 측정 스크립트: .img2threejs/measure.js
+    //   전체 비율  가로/세로 = 1.4078  →  R = 1.0 일 때 H = 1.4205
+    //   최대 반지름 위치 y_norm = 0.565 (어깨). 위가 넓고 아래로 좁아진다.
+    //   골드/앰버 경계 y_norm ≈ 0.69
+    // ---------------------------------------------------------------
+    const H = 1.4205;                    // 모델 전체 높이 (R = 1.0 기준)
+    const yy = t => t * H;               // 정규화 높이 → 모델 좌표
+
+    // 유리 본체: 바닥 축 → 바깥면 타고 위로 → 어깨(최대) → 목으로 좁아짐 → 상단 축
+    const bodyProfile = lathePoints([
+      [0.000, yy(0.000)], [0.400, yy(0.008)], [0.560, yy(0.020)],
+      [0.600, yy(0.040)], [0.625, yy(0.060)], [0.648, yy(0.080)],
+      [0.670, yy(0.100)], [0.713, yy(0.140)], [0.752, yy(0.180)],
+      [0.789, yy(0.220)], [0.823, yy(0.260)], [0.853, yy(0.300)],
+      [0.882, yy(0.340)], [0.907, yy(0.380)], [0.931, yy(0.420)],
+      [0.952, yy(0.460)], [0.973, yy(0.500)], [0.991, yy(0.540)],
+      [0.998, yy(0.565)],                                   // ← 최대 반지름(어깨)
+      [0.994, yy(0.580)], [0.930, yy(0.600)], [0.840, yy(0.620)],
+      [0.755, yy(0.645)], [0.000, yy(0.645)]                // 상단 림 → 축
+    ]);
+    const bodyGeo = new THREE.LatheGeometry(bodyProfile, 192);
+
+    // LatheGeometry의 v는 프로파일 "인덱스" 기준이라 높이와 어긋난다.
+    // 그라디언트를 실제 높이에 맞추려면 v를 y로 다시 써야 한다.
+    (function remapVByHeight(geo) {
+      const pos = geo.attributes.position, uv = geo.attributes.uv;
+      let lo = Infinity, hi = -Infinity;
+      for (let i = 0; i < pos.count; i++) {
+        const y = pos.getY(i); if (y < lo) lo = y; if (y > hi) hi = y;
+      }
+      for (let i = 0; i < pos.count; i++) uv.setY(i, (pos.getY(i) - lo) / (hi - lo));
+      uv.needsUpdate = true;
+    })(bodyGeo);
+
+    // e.png에서 라벨을 피해 좌우 0.72R 지점을 샘플링해 뽑은 실측 수직 램프.
+    // 아래쪽 밝은 띠 = 유리 너머로 비치는 크림, 위로 갈수록 짙은 적갈색.
+    const GLASS_RAMP = [
+      [0.000, '#7a4a14'], [0.042, '#6b1a06'], [0.083, '#6d1c06'],
+      [0.125, '#7d260a'], [0.167, '#cf8318'], [0.208, '#dcab5e'],
+      [0.250, '#eebc79'], [0.292, '#f5c17f'], [0.333, '#e18832'],
+      [0.375, '#ee9037'], [0.417, '#f2932a'], [0.458, '#f08d18'],
+      [0.500, '#e67a0a'], [0.542, '#dd6503'], [0.583, '#d05100'],
+      [0.625, '#c43c00'], [0.667, '#ba2a00'], [0.708, '#ae1d00'],
+      [0.750, '#a91700'], [0.792, '#a41500'], [0.833, '#a71700'],
+      [0.875, '#b42400'], [0.917, '#ac1e00'], [0.958, '#933a1c'],
+      [1.000, '#931a00']
+    ];
+
+    function makeGlassRamp() {
+      const c = document.createElement('canvas');
+      c.width = 4; c.height = 512;
+      const g = c.getContext('2d');
+      // 캔버스는 위가 0, UV는 아래가 0 → 램프를 뒤집어 넣는다
+      const grad = g.createLinearGradient(0, c.height, 0, 0);
+      GLASS_RAMP.forEach(([stop, hex]) => grad.addColorStop(stop, hex));
+      g.fillStyle = grad;
+      g.fillRect(0, 0, c.width, c.height);
+      const tex = new THREE.CanvasTexture(c);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
+      return tex;
+    }
+
+    // 순수 transmission으로 가면 실측 램프가 씻겨나간다.
+    // 램프를 albedo로 쓰고 transmission은 유리 느낌만 낼 만큼만 섞는다.
+    const glass = new THREE.MeshPhysicalMaterial({
+      map: makeGlassRamp(),
+      // transmission을 켜면 three.js가 유리를 "투과 패스"에서 투명 패스보다
+      // 나중에 그려 라벨을 덮어버린다. 유리 느낌은 clearcoat 하이라이트로 낸다.
+      transmission: 0.0,
+      roughness: 0.05,
+      metalness: 0.0,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.03,
+      envMapIntensity: 0.55
+    });
+    const body = new THREE.Mesh(bodyGeo, glass);
+    body.name = 'glass-body';
+    creamJar.add(body);
+
+    // 뚜껑은 rgb(230,216,190) — 노란 금색이 아니라 연한 샴페인 골드
+    // metalness=1이면 반사색이 곧 환경색이라, env를 세게 올리면 중성 회색을 그대로
+    // 받아 크롬처럼 보인다. env를 낮추고 albedo 채도를 올려야 샴페인 골드가 남는다.
+    const gold = new THREE.MeshPhysicalMaterial({
+      color: 0xd8c093,
+      metalness: 1.0,
+      roughness: 0.24,
+      clearcoat: 0.45,
+      clearcoatRoughness: 0.10,
+      envMapIntensity: 0.95
+    });
+
+    // 뚜껑: 위가 넓은 역사다리꼴. r 0.800(아래) → 0.928(위)
+    const capProfile = lathePoints([
+      [0.000, yy(0.690)], [0.800, yy(0.690)], [0.819, yy(0.700)],
+      [0.840, yy(0.740)], [0.860, yy(0.780)], [0.878, yy(0.820)],
+      [0.893, yy(0.860)], [0.907, yy(0.900)], [0.920, yy(0.940)],
+      [0.928, yy(0.978)], [0.915, yy(0.994)], [0.870, yy(1.000)],
+      [0.660, yy(1.000)]                                    // ← 상판 바깥 링 안쪽 끝
+    ]);
+    const cap = new THREE.Mesh(new THREE.LatheGeometry(capProfile, 192), gold);
+    cap.name = 'cap-shell';
+    creamJar.add(cap);
+
+    // f.png(정탑뷰): 바깥 골드 링 → 얇은 홈 → 살짝 낮은 안쪽 원반
+    const capInner = new THREE.Mesh(
+      new THREE.LatheGeometry(lathePoints([
+        [0.660, yy(1.000)], [0.640, yy(0.990)], [0.630, yy(0.988)],
+        [0.400, yy(0.992)], [0.000, yy(0.996)]
+      ]), 192),
+      new THREE.MeshPhysicalMaterial({
+        color: 0xd9cba6, metalness: 0.85, roughness: 0.42, envMapIntensity: 1.1
+      })
+    );
+    capInner.name = 'cap-top-plate';
+    creamJar.add(capInner);
+
+    // ---------------------------------------------------------------
+    // 라벨 — 글자 크기/폭도 추측하지 않고 e.png에서 밝은 픽셀 밴드를 찾아 실측했다.
+    // 각 줄의 [아래 y_norm, 위 y_norm, 원주 대비 폭] :
+    // ---------------------------------------------------------------
+    const LABEL_LINES = [
+      { text: 'Sulwhasoo',                 y0: 0.414, y1: 0.504, arc: 0.1273, serif: true },
+      { text: 'CONCENTRATED GINSENG',      y0: 0.347, y1: 0.373, arc: 0.1186 },
+      { text: 'REJUVENATING CREAM RICH',   y0: 0.304, y1: 0.329, arc: 0.1247 },
+      { text: 'CONCENTRÉ GINSENG',         y0: 0.263, y1: 0.288, arc: 0.1017 },
+      { text: 'CRÈME RICHE RAJEUNISSANTE', y0: 0.223, y1: 0.247, arc: 0.1347 }
+    ];
+    const LABEL_BOT = 0.21, LABEL_TOP = 0.52;    // 원뿔대가 덮는 구간
+    const LABEL_SPAN = LABEL_TOP - LABEL_BOT;
+    // 라벨을 원주 전체에 감으면 4096px 텍스처가 화면 수백 px로 축소되면서
+    // 밉맵이 작은 글자를 지워버린다. 실제 라벨도 정면에만 있으니 그 구간만 덮는다.
+    const LABEL_ARC = 0.24;                      // 원주 대비 패치 폭 (최대 글줄 0.135)
+
+    function makeLabelTexture() {
+      // 캔버스 비율 = 패치의 (호 길이 : 높이). 평균 반지름 0.881 →
+      // 호 0.24×5.536 = 1.329, 높이 0.440 → 약 3.02 : 1
+      const c = document.createElement('canvas');
+      c.width = 2048; c.height = 678;
+      const g = c.getContext('2d');
+      g.clearRect(0, 0, c.width, c.height);
+      g.textAlign = 'center';
+      g.textBaseline = 'alphabetic';
+
+      const toCanvasY = yn => (1 - (yn - LABEL_BOT) / LABEL_SPAN) * c.height;
+
+      for (const L of LABEL_LINES) {
+        const top = toCanvasY(L.y1), bottom = toCanvasY(L.y0);
+        // Times의 대문자/어센더 높이는 약 0.70em
+        const fontPx = (bottom - top) / 0.70;
+        g.font = `400 ${fontPx.toFixed(1)}px "Times New Roman", serif`;
+        g.fillStyle = L.serif ? '#fffaf2' : 'rgba(255,250,242,.94)';
+
+        // 실측 폭에 맞춰 가로만 스케일 — 폰트가 달라도 폭이 안 틀어진다
+        const natural = g.measureText(L.text).width;
+        const targetW = (L.arc / LABEL_ARC) * c.width;
+        g.save();
+        g.translate(c.width / 2, bottom);
+        g.scale(targetW / natural, 1);
+        g.fillText(L.text, 0, 0);
+        g.restore();
+      }
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      return tex;
+    }
+
+    // 몸체 옆면은 바깥으로 볼록하다. 라벨을 직선 원뿔대로 만들면 위·아래 끝만
+    // 표면에 닿고 중간에서는 유리가 라벨보다 바깥으로 나와 글자를 덮는다.
+    // → 라벨도 같은 측정 곡선을 따라가게 하고 반경만 0.010 띄운다.
+    const LABEL_OFFSET = 0.010;
+    const labelProfile = lathePoints([
+      [0.780, 0.210], [0.789, 0.220], [0.823, 0.260], [0.853, 0.300],
+      [0.882, 0.340], [0.907, 0.380], [0.931, 0.420], [0.952, 0.460],
+      [0.973, 0.500], [0.982, 0.520]
+    ].map(([r, t]) => [r + LABEL_OFFSET, yy(t)]));
+
+    // LatheGeometry도 phi=0이 정면(+Z). 패치를 정면 중심으로 잘라낸다.
+    const labelGeo = new THREE.LatheGeometry(
+      labelProfile, 96, -Math.PI * LABEL_ARC, Math.PI * 2 * LABEL_ARC
+    );
+    (function remapVByHeight(geo) {
+      const pos = geo.attributes.position, uv = geo.attributes.uv;
+      let lo = Infinity, hi = -Infinity;
+      for (let i = 0; i < pos.count; i++) {
+        const y = pos.getY(i); if (y < lo) lo = y; if (y > hi) hi = y;
+      }
+      for (let i = 0; i < pos.count; i++) uv.setY(i, (pos.getY(i) - lo) / (hi - lo));
+      uv.needsUpdate = true;
+    })(labelGeo);
+
+    const label = new THREE.Mesh(labelGeo, new THREE.MeshBasicMaterial({
+      map: makeLabelTexture(),
+      transparent: true,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+      toneMapped: false
+    }));
+    label.name = 'label';
+    creamJar.add(label);
+
+    // 접지 그림자 — 실제 그림자 맵 대신 그라디언트 평면 (싸고 부드럽다)
+    function makeShadowTexture() {
+      const c = document.createElement('canvas');
+      c.width = c.height = 256;
+      const g = c.getContext('2d');
+      const grad = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+      grad.addColorStop(0, 'rgba(90,55,25,.42)');
+      grad.addColorStop(0.55, 'rgba(90,55,25,.14)');
+      grad.addColorStop(1, 'rgba(90,55,25,0)');
+      g.fillStyle = grad;
+      g.fillRect(0, 0, 256, 256);
+      return new THREE.CanvasTexture(c);
+    }
+    const shadow = new THREE.Mesh(
+      new THREE.PlaneGeometry(3.4, 3.4),
+      new THREE.MeshBasicMaterial({ map: makeShadowTexture(), transparent: true, depthWrite: false })
+    );
+    shadow.name = 'ground-shadow';
+    shadow.userData.explodeWithParent = true;
+    shadow.rotation.x = -Math.PI / 2;
+    shadow.position.y = -0.01;
+    product.add(shadow);
+
+    // 용기 원점을 무게중심으로 옮겨 회전이 중앙에서 일어나게
+    product.children.forEach(m => { if (m !== shadow) m.position.y -= H / 2; });
+    shadow.position.y = -H / 2 - 0.01;
+
+    // ---------------------------------------------------------------
+    // 식물 조형: a~d.png의 앞·옆·뒤 실루엣을 참고한 실제 3D 메시 어셈블리.
+    // i.png는 형태 확인용 레퍼런스로만 남기고 런타임에서는 사용하지 않는다.
+    // ---------------------------------------------------------------
+    function createBotanicalAssembly() {
+      const assembly = new THREE.Group();
+      assembly.name = 'botanical-assembly';
+
+      const materials = {
+        stem: new THREE.MeshStandardMaterial({ color: 0x586121, roughness: 0.72 }),
+        stemDark: new THREE.MeshStandardMaterial({ color: 0x30390f, roughness: 0.76 }),
+        olive: new THREE.MeshPhysicalMaterial({ color: 0x78832c, roughness: 0.64, clearcoat: 0.15 }),
+        bronze: new THREE.MeshPhysicalMaterial({ color: 0x7d431d, roughness: 0.58, clearcoat: 0.2 }),
+        coral: new THREE.MeshPhysicalMaterial({ color: 0xf36d38, roughness: 0.53, clearcoat: 0.12 }),
+        coralLight: new THREE.MeshPhysicalMaterial({ color: 0xffad78, roughness: 0.58, clearcoat: 0.08 }),
+        orange: new THREE.MeshPhysicalMaterial({ color: 0xff8a05, roughness: 0.48, clearcoat: 0.18 }),
+        gold: new THREE.MeshPhysicalMaterial({ color: 0xf5bd2e, roughness: 0.5, clearcoat: 0.12 }),
+        cream: new THREE.MeshPhysicalMaterial({ color: 0xfff4dc, roughness: 0.62, clearcoat: 0.08 }),
+        white: new THREE.MeshPhysicalMaterial({ color: 0xfffdf1, roughness: 0.5, clearcoat: 0.16 }),
+        burgundy: new THREE.MeshPhysicalMaterial({ color: 0x561423, roughness: 0.67, clearcoat: 0.1 }),
+        pollen: new THREE.MeshStandardMaterial({ color: 0xe5b52e, roughness: 0.58 })
+      };
+
+      function createPetalGeometry(width = 1, length = 1, depth = 0.08) {
+        const shape = new THREE.Shape();
+        shape.moveTo(0, 0);
+        shape.bezierCurveTo(-0.5 * width, 0.18 * length, -0.46 * width, 0.74 * length, 0, length);
+        shape.bezierCurveTo(0.46 * width, 0.74 * length, 0.5 * width, 0.18 * length, 0, 0);
+        const geometry = new THREE.ExtrudeGeometry(shape, {
+          depth,
+          bevelEnabled: true,
+          bevelSegments: 2,
+          steps: 1,
+          bevelSize: Math.min(width, length) * 0.035,
+          bevelThickness: depth * 0.28,
+          curveSegments: 8
+        });
+        geometry.translate(0, 0, -depth * 0.5);
+        geometry.computeVertexNormals();
+        return geometry;
+      }
+
+      const broadPetalGeometry = createPetalGeometry(1, 1, 0.11);
+      const narrowPetalGeometry = createPetalGeometry(0.52, 1, 0.09);
+      const tinyPetalGeometry = createPetalGeometry(0.72, 1, 0.055);
+      const sphereGeometry = new THREE.SphereGeometry(1, 16, 10);
+
+      function createPetal(material, scale, name) {
+        const mesh = new THREE.Mesh(broadPetalGeometry, material);
+        mesh.name = name;
+        mesh.scale.set(scale[0], scale[1], scale[2] ?? 1);
+        return mesh;
+      }
+
+      function addPetalRing(group, options) {
+        const {
+          count, radius, width, length, material, phase = 0, tilt = 0.12, zWave = 0.06, name
+        } = options;
+        for (let index = 0; index < count; index += 1) {
+          const angle = phase + index / count * Math.PI * 2;
+          const petal = createPetal(material, [width, length, 1], `${name}-petal-${index + 1}`);
+          petal.position.set(
+            Math.cos(angle) * radius,
+            Math.sin(angle) * radius,
+            Math.sin(angle * 2) * zWave
+          );
+          petal.rotation.set(
+            tilt + Math.sin(angle) * 0.1,
+            Math.cos(angle) * 0.18,
+            angle - Math.PI / 2
+          );
+          group.add(petal);
+        }
+      }
+
+      function addFlowerCenter(group, radius, material, name) {
+        const center = new THREE.Mesh(sphereGeometry, material);
+        center.name = name;
+        center.scale.set(radius, radius * 0.72, radius * 0.52);
+        center.position.z = 0.1;
+        group.add(center);
+        for (let index = 0; index < 7; index += 1) {
+          const angle = index / 7 * Math.PI * 2;
+          const stamen = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.008, 0.012, radius * 0.88, 6),
+            materials.pollen
+          );
+          stamen.name = `${name}-stamen-${index + 1}`;
+          stamen.position.set(Math.cos(angle) * radius * 0.45, Math.sin(angle) * radius * 0.34, 0.18);
+          stamen.rotation.x = Math.PI / 2;
+          group.add(stamen);
+        }
+      }
+
+      function createOpenFlower(name, position, options) {
+        const group = new THREE.Group();
+        group.name = name;
+        addPetalRing(group, {
+          count: options.outerCount,
+          radius: options.outerRadius,
+          width: options.outerWidth,
+          length: options.outerLength,
+          material: options.outerMaterial,
+          phase: options.phase ?? 0,
+          tilt: options.tilt ?? 0.15,
+          zWave: options.zWave ?? 0.08,
+          name: `${name}-outer`
+        });
+        addPetalRing(group, {
+          count: options.innerCount,
+          radius: options.innerRadius,
+          width: options.innerWidth,
+          length: options.innerLength,
+          material: options.innerMaterial,
+          phase: (options.phase ?? 0) + Math.PI / options.innerCount,
+          tilt: (options.tilt ?? 0.15) + 0.2,
+          zWave: (options.zWave ?? 0.08) * 0.55,
+          name: `${name}-inner`
+        });
+        addFlowerCenter(group, options.centerRadius, options.centerMaterial, `${name}-center`);
+        group.position.copy(position);
+        group.rotation.set(options.rotationX ?? 0, options.rotationY ?? 0, options.rotationZ ?? 0);
+        return group;
+      }
+
+      function createTube(points, radius, material, name, segments = 40) {
+        const curve = new THREE.CatmullRomCurve3(points);
+        const mesh = new THREE.Mesh(
+          new THREE.TubeGeometry(curve, segments, radius, 8, false),
+          material
+        );
+        mesh.name = name;
+        return { mesh, curve };
+      }
+
+      function createStemBetween(start, end, radius, material, name) {
+        const direction = new THREE.Vector3().subVectors(end, start);
+        const mesh = new THREE.Mesh(
+          new THREE.CylinderGeometry(radius * 0.78, radius, direction.length(), 8),
+          material
+        );
+        mesh.name = name;
+        mesh.position.copy(start).add(end).multiplyScalar(0.5);
+        mesh.quaternion.setFromUnitVectors(
+          new THREE.Vector3(0, 1, 0),
+          direction.clone().normalize()
+        );
+        return mesh;
+      }
+
+      function addBractOnCurve(group, curve, t, angle, scale, material, name) {
+        const point = curve.getPointAt(t);
+        const tangent = curve.getTangentAt(t).normalize();
+        const bract = new THREE.Mesh(narrowPetalGeometry, material);
+        bract.name = name;
+        bract.position.copy(point);
+        bract.scale.set(scale[0], scale[1], scale[2] ?? 1);
+        bract.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), tangent);
+        bract.rotateOnAxis(new THREE.Vector3(0, 1, 0), angle);
+        bract.rotateX(-0.48);
+        group.add(bract);
+      }
+
+      const ginsengSpike = new THREE.Group();
+      ginsengSpike.name = 'ginseng-spike';
+      const ginsengPath = createTube([
+        new THREE.Vector3(-0.5, 0.28, -0.42),
+        new THREE.Vector3(-0.43, 0.78, -0.44),
+        new THREE.Vector3(-0.1, 1.24, -0.35),
+        new THREE.Vector3(0.42, 1.58, -0.2),
+        new THREE.Vector3(0.88, 1.7, -0.08)
+      ], 0.052, materials.stemDark, 'ginseng-stem', 56);
+      ginsengSpike.add(ginsengPath.mesh);
+      for (let index = 0; index < 26; index += 1) {
+        const t = 0.12 + index / 29;
+        const taper = 1 - t * 0.38;
+        addBractOnCurve(
+          ginsengSpike,
+          ginsengPath.curve,
+          t,
+          index * 2.37,
+          [0.23 * taper, 0.34 * taper, 1],
+          index % 4 === 0 ? materials.gold : index % 2 === 0 ? materials.coral : materials.bronze,
+          `ginseng-bract-${index + 1}`
+        );
+      }
+      assembly.add(ginsengSpike);
+
+      const coralFlower = createOpenFlower('coral-flower', new THREE.Vector3(-1.02, -0.12, 0.5), {
+        outerCount: 11, outerRadius: 0.08, outerWidth: 0.55, outerLength: 0.68,
+        innerCount: 8, innerRadius: 0.055, innerWidth: 0.36, innerLength: 0.48,
+        outerMaterial: materials.coralLight, innerMaterial: materials.coral,
+        centerMaterial: materials.gold, centerRadius: 0.18,
+        rotationX: -0.06, rotationY: 0.26, rotationZ: -0.22, phase: 0.18, zWave: 0.11
+      });
+      coralFlower.add(createStemBetween(
+        new THREE.Vector3(0.18, -0.18, -0.28),
+        new THREE.Vector3(0.58, -0.64, -0.38),
+        0.035,
+        materials.stem,
+        'coral-flower-stem'
+      ));
+      assembly.add(coralFlower);
+
+      const orangeFlower = createOpenFlower('orange-flower', new THREE.Vector3(1.04, 0.4, 0.44), {
+        outerCount: 10, outerRadius: 0.06, outerWidth: 0.46, outerLength: 0.58,
+        innerCount: 7, innerRadius: 0.045, innerWidth: 0.31, innerLength: 0.4,
+        outerMaterial: materials.orange, innerMaterial: materials.gold,
+        centerMaterial: materials.pollen, centerRadius: 0.15,
+        rotationX: 0.18, rotationY: -0.34, rotationZ: 0.3, phase: 0.1, zWave: 0.1
+      });
+      assembly.add(orangeFlower);
+
+      const paleBud = new THREE.Group();
+      paleBud.name = 'pale-bud';
+      paleBud.position.set(-1.08, 0.47, 0.16);
+      paleBud.rotation.set(-0.08, 0.16, -0.42);
+      paleBud.add(createStemBetween(
+        new THREE.Vector3(0, -0.58, -0.04),
+        new THREE.Vector3(0, 0.06, 0),
+        0.045,
+        materials.stem,
+        'pale-bud-stem'
+      ));
+      for (let index = 0; index < 5; index += 1) {
+        const angle = index / 5 * Math.PI * 2;
+        const sepal = new THREE.Mesh(narrowPetalGeometry, materials.olive);
+        sepal.name = `pale-bud-sepal-${index + 1}`;
+        sepal.scale.set(0.38, 0.45, 1);
+        sepal.rotation.set(-0.4, angle, angle);
+        sepal.position.set(Math.cos(angle) * 0.08, 0, Math.sin(angle) * 0.08);
+        paleBud.add(sepal);
+        const petal = new THREE.Mesh(narrowPetalGeometry, index % 2 ? materials.cream : materials.coralLight);
+        petal.name = `pale-bud-petal-${index + 1}`;
+        petal.scale.set(0.48, 0.62, 1);
+        petal.position.set(Math.cos(angle) * 0.06, 0.13, Math.sin(angle) * 0.06);
+        petal.rotation.set(-0.2, angle, angle * 0.08);
+        paleBud.add(petal);
+      }
+      assembly.add(paleBud);
+
+      const whiteCluster = new THREE.Group();
+      whiteCluster.name = 'white-flower-cluster';
+      whiteCluster.position.set(0.75, -0.77, 0.6);
+      whiteCluster.rotation.set(-0.12, -0.26, 0.12);
+      const blossomOffsets = [
+        [-0.2, -0.18, 0.02], [0.03, -0.24, 0.05], [0.24, -0.13, -0.02],
+        [-0.27, 0.04, -0.05], [-0.04, 0.01, 0.08], [0.2, 0.08, 0.02],
+        [-0.2, 0.25, 0.02], [0.02, 0.27, 0.1], [0.24, 0.29, -0.04], [0.08, 0.48, 0]
+      ];
+      blossomOffsets.forEach((offset, blossomIndex) => {
+        const blossom = new THREE.Group();
+        blossom.name = `white-blossom-${blossomIndex + 1}`;
+        blossom.position.set(offset[0], offset[1], offset[2]);
+        blossom.rotation.z = blossomIndex * 0.61;
+        for (let petalIndex = 0; petalIndex < 5; petalIndex += 1) {
+          const angle = petalIndex / 5 * Math.PI * 2;
+          const petal = new THREE.Mesh(tinyPetalGeometry, materials.white);
+          petal.name = `white-blossom-${blossomIndex + 1}-petal-${petalIndex + 1}`;
+          petal.scale.set(0.19, 0.2, 1);
+          petal.rotation.set(0.15 + blossomIndex * 0.01, Math.sin(angle) * 0.12, angle - Math.PI / 2);
+          petal.position.set(Math.cos(angle) * 0.025, Math.sin(angle) * 0.025, 0);
+          blossom.add(petal);
+        }
+        const center = new THREE.Mesh(sphereGeometry, blossomIndex % 3 === 0 ? materials.olive : materials.pollen);
+        center.name = `white-blossom-${blossomIndex + 1}-center`;
+        center.scale.setScalar(0.045);
+        center.position.z = 0.055;
+        blossom.add(center);
+        whiteCluster.add(blossom);
+        whiteCluster.add(createStemBetween(
+          new THREE.Vector3(0, -0.42, -0.14),
+          new THREE.Vector3(offset[0], offset[1], offset[2] - 0.04),
+          0.012,
+          materials.stem,
+          `white-cluster-stem-${blossomIndex + 1}`
+        ));
+      });
+      assembly.add(whiteCluster);
+
+      const burgundyCluster = new THREE.Group();
+      burgundyCluster.name = 'burgundy-cluster';
+      burgundyCluster.position.set(-0.12, -0.78, 0.48);
+      for (let flowerIndex = 0; flowerIndex < 6; flowerIndex += 1) {
+        const angle = flowerIndex / 6 * Math.PI * 2;
+        const smallFlower = new THREE.Group();
+        smallFlower.name = `burgundy-flower-${flowerIndex + 1}`;
+        smallFlower.position.set(Math.cos(angle) * 0.25, Math.sin(angle) * 0.15, Math.sin(angle) * 0.07);
+        addPetalRing(smallFlower, {
+          count: 5,
+          radius: 0.015,
+          width: 0.16,
+          length: 0.18,
+          material: materials.burgundy,
+          phase: angle,
+          tilt: 0.28,
+          zWave: 0.025,
+          name: `burgundy-flower-${flowerIndex + 1}`
+        });
+        const center = new THREE.Mesh(sphereGeometry, materials.bronze);
+        center.name = `burgundy-flower-${flowerIndex + 1}-center`;
+        center.scale.setScalar(0.045);
+        center.position.z = 0.055;
+        smallFlower.add(center);
+        burgundyCluster.add(smallFlower);
+      }
+      assembly.add(burgundyCluster);
+
+      const lowerPods = new THREE.Group();
+      lowerPods.name = 'lower-pods';
+      lowerPods.position.set(-0.08, -0.86, 0.12);
+      const podData = [
+        [-0.72, -0.18, 0.05, -1.05, 0.52, materials.olive],
+        [-0.42, -0.42, 0.22, -0.35, 0.55, materials.bronze],
+        [0.1, -0.5, 0.32, 0.05, 0.62, materials.coralLight],
+        [0.5, -0.38, 0.16, 0.48, 0.57, materials.bronze],
+        [0.78, -0.16, -0.02, 0.88, 0.5, materials.olive]
+      ];
+      podData.forEach(([x, y, z, rotationZ, length, material], index) => {
+        const pod = new THREE.Mesh(broadPetalGeometry, material);
+        pod.name = `lower-pod-${index + 1}`;
+        pod.position.set(x, y, z);
+        pod.scale.set(0.34, length, 1.35);
+        pod.rotation.set(0.52 + index * 0.08, index * 0.18, rotationZ);
+        lowerPods.add(pod);
+        const seam = createStemBetween(
+          new THREE.Vector3(x, y, z + 0.08),
+          new THREE.Vector3(x + Math.sin(rotationZ) * length * 0.52, y + Math.cos(rotationZ) * length * 0.52, z + 0.11),
+          0.012,
+          materials.stemDark,
+          `lower-pod-seam-${index + 1}`
+        );
+        lowerPods.add(seam);
+      });
+      assembly.add(lowerPods);
+
+      const sideSpike = new THREE.Group();
+      sideSpike.name = 'side-spike';
+      const sidePath = createTube([
+        new THREE.Vector3(0.56, -0.48, -0.32),
+        new THREE.Vector3(0.96, -0.3, -0.4),
+        new THREE.Vector3(1.28, -0.1, -0.32),
+        new THREE.Vector3(1.4, 0.14, -0.18)
+      ], 0.036, materials.stemDark, 'side-spike-stem', 30);
+      sideSpike.add(sidePath.mesh);
+      for (let index = 0; index < 12; index += 1) {
+        const t = 0.1 + index / 14;
+        addBractOnCurve(
+          sideSpike,
+          sidePath.curve,
+          t,
+          index * 2.2,
+          [0.18, 0.25 * (1 - t * 0.25), 1],
+          index % 2 ? materials.bronze : materials.olive,
+          `side-spike-bract-${index + 1}`
+        );
+      }
+      assembly.add(sideSpike);
+
+      function addSocket(parent, name, position) {
+        const socket = new THREE.Object3D();
+        socket.name = name;
+        socket.position.copy(position);
+        socket.userData.isSocket = true;
+        parent.add(socket);
+        return socket;
+      }
+
+      const sockets = {
+        ginsengRoot: addSocket(ginsengSpike, 'socket-ginseng-root', new THREE.Vector3(-0.5, 0.28, -0.42)),
+        coralRoot: addSocket(coralFlower, 'socket-coral-root', new THREE.Vector3(0.18, -0.18, -0.28)),
+        orangeRoot: addSocket(orangeFlower, 'socket-orange-root', new THREE.Vector3(-0.24, -0.32, -0.18)),
+        clusterRoot: addSocket(whiteCluster, 'socket-white-cluster-root', new THREE.Vector3(0, -0.42, -0.14)),
+        sideRoot: addSocket(sideSpike, 'socket-side-spike-root', new THREE.Vector3(0.56, -0.48, -0.32))
+      };
+      const partPivots = [...assembly.children];
+      const basePositions = new Map(partPivots.map(part => [part, part.position.clone()]));
+
+      function setExploded(amount = 0) {
+        const distance = Math.max(0, Math.min(1, amount)) * 0.28;
+        partPivots.forEach((part) => {
+          const basePosition = basePositions.get(part);
+          const direction = basePosition.clone();
+          direction.y *= 0.65;
+          if (direction.lengthSq() < 0.01) direction.set(0, -1, 0.2);
+          part.position.copy(basePosition).add(direction.normalize().multiplyScalar(distance));
+        });
+      }
+
+      function resolvePart(object) {
+        let currentObject = object;
+        while (currentObject && currentObject.parent !== assembly) currentObject = currentObject.parent;
+        return currentObject?.parent === assembly ? currentObject : null;
+      }
+
+      assembly.userData.sculptRuntime = {
+        sourceViews: ['img/a.png', 'img/b.png', 'img/c.png', 'img/d.png'],
+        referenceOnly: ['img/i.png'],
+        sockets,
+        nodes: partPivots.map(child => child.name),
+        colliders: [
+          { id: 'botanical-crown', type: 'sphere', center: [0, 0.25, 0], radius: 1.55, isTrigger: false },
+          { id: 'lower-cluster', type: 'sphere', center: [0, -0.82, 0.34], radius: 0.78, isTrigger: false }
+        ],
+        destructionGroups: {
+          upper: ['ginseng-spike', 'pale-bud', 'orange-flower'],
+          lower: ['coral-flower', 'white-flower-cluster', 'burgundy-cluster', 'lower-pods', 'side-spike']
+        },
+        setExploded,
+        resolvePart
+      };
+      return assembly;
+    }
+
+    const botanicalAssembly = createBotanicalAssembly();
+    product.add(botanicalAssembly);
+
+    // ---------------------------------------------------------------
+    // 스크롤 → 목표값. 렌더 루프에서 lerp로 감쇠시켜야 끊기지 않는다.
+    // ---------------------------------------------------------------
+    // 각 구간의 [진행도, 값] 키프레임을 선형 보간
+    function track(p, keys) {
+      for (let i = 0; i < keys.length - 1; i++) {
+        const [p0, v0] = keys[i], [p1, v1] = keys[i + 1];
+        if (p <= p1) {
+          const t = p1 === p0 ? 0 : (p - p0) / (p1 - p0);
+          const e = t * t * (3 - 2 * t); // smoothstep
+          return v0 + (v1 - v0) * e;
+        }
+      }
+      return keys[keys.length - 1][1];
+    }
+
+    const target = { rotY: 0, posX: 0, posY: 0, rotX: 0, camZ: 5.0 };
+    const current = { ...target };
+    let progress = 0;
+    let reviewPose = null;
+
+    function updateTargets() {
+      const p = progress;
+      target.rotY = p * Math.PI * 3.2;                                  // 총 1.6바퀴
+      target.posX = track(p, [[0, 0.55], [0.33, -0.72], [0.66, 0.72], [1, -1.4]]);
+      target.posY = track(p, [[0, 0], [0.33, 0], [0.66, -0.08], [1, 0]]);
+      target.rotX = track(p, [[0, 0.02], [0.5, -0.16], [1, 0.04]]);
+      target.camZ = track(p, [[0, 5.0], [0.33, 4.8], [0.66, 4.9], [1, 5.2]]);
+    }
+
+    function onScroll() {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      progress = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+      updateTargets();
+      hint.style.opacity = progress > 0.02 ? 0 : 1;
+    }
+    const hint = document.getElementById('hint');
+    addEventListener('scroll', onScroll, { passive: true });
+
+    // 섹션 카피 페이드인
+    const io = new IntersectionObserver(
+      entries => entries.forEach(e => e.target.classList.toggle('is_visible', e.isIntersecting)),
+      { threshold: 0.4 }
+    );
+    document.querySelectorAll('section').forEach(s => io.observe(s));
+
+    addEventListener('resize', () => {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+      onScroll();
+    });
+
+    const clock = new THREE.Clock();
+    const LERP = 0.075;
+    const reducedMotionQuery = matchMedia('(prefers-reduced-motion: reduce)');
+    let isReducedMotion = reducedMotionQuery.matches;
+    reducedMotionQuery.addEventListener('change', event => {
+      isReducedMotion = event.matches;
+    });
+
+    function getSceneLayout() {
+      if (innerWidth < 600) {
+        return { scale: 0.24, travelX: 0, travelY: 0.1, baseY: -0.05 };
+      }
+      if (innerWidth < 900) {
+        return { scale: 0.38, travelX: 0.18, travelY: 0.18, baseY: -0.16 };
+      }
+      return { scale: 0.68, travelX: 0.52, travelY: 0.72, baseY: 0 };
+    }
+
+    function tick() {
+      const t = clock.getElapsedTime();
+      const layout = getSceneLayout();
+      const interpolation = isReducedMotion ? 1 : LERP;
+
+      for (const k in target) current[k] += (target[k] - current[k]) * interpolation;
+
+      const displayX = current.posX * layout.travelX;
+      const displayY = layout.baseY + current.posY * layout.travelY;
+      product.rotation.y = current.rotY;
+      product.rotation.x = current.rotX;
+      product.scale.setScalar(layout.scale);
+      product.position.x = displayX;
+      // 스크롤이 멈춰도 미세하게 떠 있도록 사인파를 얹는다
+      const floatingY = isReducedMotion ? 0 : Math.sin(t * 0.8) * 0.035 * layout.scale;
+      product.position.y = displayY + floatingY;
+      camera.position.z = current.camZ;
+      camera.lookAt(displayX * 0.15, displayY * 0.08 + 0.1, 0);
+
+      if (reviewPose !== null) {
+        product.rotation.set(0, reviewPose, 0);
+        product.scale.setScalar(0.72);
+        product.position.set(0, -0.04, 0);
+        camera.position.z = 5.15;
+        camera.lookAt(0, 0.06, 0);
+      }
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    }
+
+    onScroll();
+    Object.assign(current, target);
+    tick();
+
+    // 검수용: 콘솔에서 __preview(0..1) 로 임의 스크롤 지점의 포즈를 바로 확인
+    window.__preview = p => {
+      reviewPose = null;
+      progress = Math.min(1, Math.max(0, p));
+      updateTargets();
+      Object.assign(current, target);
+    };
+    window.__reviewModel = radians => { reviewPose = radians; };
+    window.__scene = { THREE, scene, product, botanicalAssembly, camera, renderer };
+    requestAnimationFrame(() => {
+      const loaderElement = document.getElementById('loader');
+      loaderElement.classList.add('is_hidden');
+      loaderElement.setAttribute('aria-hidden', 'true');
+    });
+  </script>
 </body>
 </html>

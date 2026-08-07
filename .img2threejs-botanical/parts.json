@@ -1,0 +1,67 @@
+{
+  "model": "botanical-cream-assembly",
+  "parts": [
+    {
+      "name": "cream-jar",
+      "kind": "part",
+      "module": "cream-jar",
+      "triangles": 16704
+    },
+    {
+      "name": "botanical-assembly",
+      "kind": "part",
+      "module": "botanical-assembly",
+      "triangles": 39212
+    },
+    {
+      "name": "ginseng-spike",
+      "kind": "part",
+      "module": "ginseng-spike",
+      "triangles": 5784
+    },
+    {
+      "name": "coral-flower",
+      "kind": "part",
+      "module": "coral-flower",
+      "triangles": 4060
+    },
+    {
+      "name": "orange-flower",
+      "kind": "part",
+      "module": "orange-flower",
+      "triangles": 3652
+    },
+    {
+      "name": "pale-bud",
+      "kind": "part",
+      "module": "pale-bud",
+      "triangles": 1912
+    },
+    {
+      "name": "white-flower-cluster",
+      "kind": "part",
+      "module": "white-flower-cluster",
+      "triangles": 12600
+    },
+    {
+      "name": "burgundy-cluster",
+      "kind": "part",
+      "module": "burgundy-cluster",
+      "triangles": 7368
+    },
+    {
+      "name": "lower-pods",
+      "kind": "part",
+      "module": "lower-pods",
+      "triangles": 1100
+    },
+    {
+      "name": "side-spike",
+      "kind": "part",
+      "module": "side-spike",
+      "triangles": 2736
+    }
+  ],
+  "unnamedMeshes": 0,
+  "integralMeshes": 225
+}
